@@ -1,9 +1,16 @@
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Image, View } from "react-native";
+import styled from "styled-components/native";
+
+const Container = styled.View``;
+const Background = styled.Image`
+  width: 100%;
+  height: 100%;
+`;
 
 export default function ScreenLayout({ loading, children }) {
   return (
-    <View
+    <Container
       style={{
         backgroundColor: "black",
         flex: 1,
@@ -12,6 +19,6 @@ export default function ScreenLayout({ loading, children }) {
       }}
     >
       {loading ? <ActivityIndicator color="white" /> : children}
-    </View>
+    </Container>
   );
 }

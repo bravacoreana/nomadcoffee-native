@@ -24,7 +24,7 @@ export default function useUser(username) {
       username,
     },
   });
-  console.log(data);
+
   return { data };
   //   const hasToken = useReactiveVar(isLoggedInVar);
   //   const { data, error } = useQuery(ME_QUERY, {

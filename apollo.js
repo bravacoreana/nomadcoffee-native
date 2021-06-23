@@ -6,7 +6,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { offsetLimitPagination } from "@apollo/client/utilities";
+// import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const TOKEN = "token";
 
@@ -42,7 +42,13 @@ export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        seeFeed: offsetLimitPagination(),
+        // seeCoffeeShops: offsetLimitPagination(),
+        seeCoffeeShops: {
+          keyArgs: false,
+          merge(existing = [], incoming = []) {
+            return [...existing, ...incoming];
+          },
+        },
       },
     },
   },

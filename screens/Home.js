@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { ScrollView, RefreshControl, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import { gql, useQuery } from "@apollo/client";
-import CoffeeShop from "../components/CoffeeShop";
 import ScreenLayout from "../components/ScreenLayout";
-// import CoffeeShops from "../components/CoffeeShops";
+import CoffeeShop from "../components/CoffeeShop";
 
 const FEED_QUERY = gql`
   query seeCoffeeShops($page: Int) {
@@ -18,6 +17,7 @@ const FEED_QUERY = gql`
         avatar
       }
       categories {
+        id
         name
       }
       photos {
@@ -30,45 +30,56 @@ const FEED_QUERY = gql`
 `;
 
 const CoffeeShops = styled.View``;
+const Background = styled.Image`
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  aspect-ratio: 1;
+  opacity: 0.25;
+`;
 
 export default function Home({ route }) {
-  const { data, loading } = useQuery(FEED_QUERY, {
+  const { data, loading, refetch, fetchMore } = useQuery(FEED_QUERY, {
     variables: {
       id: route?.params?.id,
+      page: 1,
     },
   });
 
-  const [refreshing, setRefreshing] = useState();
+  const renderShop = ({ item: shop }) => {
+    return <CoffeeShop {...shop} key={shop.id} />;
+  };
+
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
   return (
-    <ScreenLayout>
-      <Text style={{ color: "white" }}>Coffee shop</Text>
+    <ScreenLayout loading={loading}>
+      <Background source={require("../assets/background.jpeg")} />
+      <CoffeeShops>
+        <FlatList
+          style={{ width: "100%" }}
+          onEndReachedThreshold={0.05}
+          onEndReached={() =>
+            fetchMore({
+              variables: {
+                page: data?.seeCoffeeShops?.length / 6 + 1,
+              },
+            })
+          }
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          showsVerticalScrollIndicator={false}
+          data={data?.seeCoffeeShops}
+          renderItem={renderShop}
+          keyExtractor={(shop) => "" + shop.id}
+        />
+      </CoffeeShops>
     </ScreenLayout>
-    // <ScreenLayout loading={loading}>
-    //   <ScrollView
-    //     refreshControl={
-    //       <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-    //     }
-    //     style={{ backgroundColor: "black" }}
-    //     contentContainerStyle={{
-    //       backgroundColor: "black",
-    //       alignItems: "center",
-    //       justifyContent: "center",
-    //     }}
-    //   >
-    //     <CoffeeShops>
-    //       {!loading
-    //         ? data?.seeCoffeeShops?.map((shop) => (
-    //             <CoffeeShop key={"" + shop.id + Math.random()} {...shop} />
-    //           ))
-    //         : null}
-    //     </CoffeeShops>
-    //   </ScrollView>
-    // </ScreenLayout>
   );
 }

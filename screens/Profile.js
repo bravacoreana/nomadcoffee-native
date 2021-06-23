@@ -108,8 +108,6 @@ export default function Profile({ navigation, route }) {
     },
   });
 
-  console.log(QueryData);
-
   useEffect(() => {
     navigation.setOptions({
       title: data?.me?.username,
