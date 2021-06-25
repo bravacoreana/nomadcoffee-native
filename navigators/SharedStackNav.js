@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Home";
 import Search from "../screens/Search";
 import Profile from "../screens/Profile";
-import Map from "../screens/Map";
 
 const Stack = createStackNavigator();
 
@@ -11,7 +10,7 @@ export default function ({ screenName }) {
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerBackTitleVisible: false,
+        headerBackTitleVisible: false,
         headerTintColor: "white",
         headerStyle: {
           shadowColor: "rgba(255,255,255,0.2)",

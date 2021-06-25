@@ -29,7 +29,10 @@ const FEED_QUERY = gql`
   }
 `;
 
-const CoffeeShops = styled.View``;
+const CoffeeShops = styled.View`
+  margin-top: 20px;
+`;
+
 const Background = styled.Image`
   height: 100%;
   width: 100%;

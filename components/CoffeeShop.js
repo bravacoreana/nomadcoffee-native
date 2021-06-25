@@ -109,8 +109,8 @@ export default function CoffeeShop(props) {
           <ShopName>{name}</ShopName>
           <ShopCategories>
             {categories
-              ? categories.map((category) => (
-                  <ShopCategory key={category.id}>
+              ? categories.map((category, index) => (
+                  <ShopCategory key={category.id + index}>
                     <Category>#{category.name}</Category>
                   </ShopCategory>
                 ))

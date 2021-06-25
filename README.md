@@ -16,8 +16,12 @@ RN day 2
 
 RN day 3
 
-Create the Home tab: show all the coffee shops in your Database.
+Create the Home tab: show the coffee shops in db.
 
 - [x] Infinite Scroll
 - [x] Pull to Refresh
-- [x] The Coffee Shop component should display the name, photos and categories.
+- [x] Coffee shop component: name, photos and categories.
+
+RN day 4
+
+- [x] Search Tab: by name of coffee shop and categories

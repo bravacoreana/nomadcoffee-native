@@ -26,15 +26,4 @@ export default function useUser(username) {
   });
 
   return { data };
-  //   const hasToken = useReactiveVar(isLoggedInVar);
-  //   const { data, error } = useQuery(ME_QUERY, {
-  //     skip: !hasToken,
-  //   });
-  //   if (error) console.log(error);
-  //   useEffect(() => {
-  //     if (data?.me === null) {
-  //       logUserOut();
-  //     }
-  //   }, [data]);
-  //   return { data };
 }
