@@ -45,8 +45,11 @@ export const cache = new InMemoryCache({
         // seeCoffeeShops: offsetLimitPagination(),
         seeCoffeeShops: {
           keyArgs: false,
-          merge(existing = [], incoming = []) {
-            return [...existing, ...incoming];
+          merge(existing = {}, incoming = {}) {
+            return {
+              ...incoming,
+              shops: [...(existing.shops || []), ...incoming.shops],
+            };
           },
         },
       },
