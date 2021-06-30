@@ -77,7 +77,7 @@ export default function LogIn() {
       />
       <AuthButton
         text="Log In"
-        // loading={loading}
+        loading={loading}
         disabled={!watch("username") || !watch("password")}
         onPress={handleSubmit(onValid)}
       />

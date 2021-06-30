@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components/native";
-import {
-  ShadowPropTypesIOS,
-  TouchableOpacity,
-  useWindowDimensions,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useWindowDimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, Text } from "react-native";
-import { gql } from "@apollo/client";
 import Maps from "./GeoCoder";
-import { BlurView } from "expo-blur";
+import { useNavigation } from "@react-navigation/native";
+import { gql, useMutation } from "@apollo/client";
+
+const TOGGLE_LIKE_MUTATION = gql`
+  mutation toggleLike($id: Int!) {
+    toggleLike(id: $id) {
+      ok
+      error
+    }
+  }
+`;
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -34,6 +37,11 @@ const File = styled.Image`
   height: 100%;
   border-radius: 10px;
 `;
+const LikeButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+`;
 
 const ShopContainer = styled.View`
   height: 160px;
@@ -45,6 +53,8 @@ const ShopName = styled.Text`
   font-size: 20px;
   margin-top: 10px;
 `;
+
+const Username = styled.Text``;
 
 const ShopLocation = styled.Text`
   text-align: right;
@@ -70,15 +80,98 @@ const Category = styled.Text`
 `;
 
 export default function CoffeeShop(props) {
-  const { id, categories, isMine, latitude, longitude, name, photos, user } =
-    props;
+  const {
+    id,
+    categories,
+    isMine,
+    latitude,
+    longitude,
+    name,
+    photos,
+    user,
+    likes,
+    isLiked,
+  } = props;
   const { width, height, scale } = useWindowDimensions();
+  const navigation = useNavigation();
+
+  const updateToggleLike = (cache, result) => {
+    const {
+      data: {
+        toggleLike: { ok },
+      },
+    } = result;
+    // way 1 - manuel
+    // if (ok) {
+    //   const fragmentId = `CoffeeShop:${id}`;
+    //   const fragment = gql`
+    //     fragment BSName on CoffeeShop {
+    //       isLiked
+    //       likes
+    //     }
+    //   `;
+    //   const result = cache.readFragment({
+    //     id: fragmentId,
+    //     fragment,
+    //   });
+
+    //   if ("isLiked" in result && "likes" in result) {
+    //     const { isLiked: cacheIsLiked, likes: cacheLikes } = result;
+    //     cache.writeFragment({
+    //       id: fragmentId,
+    //       fragment,
+    //       data: {
+    //         isLiked: !cacheIsLiked,
+    //         likes: cacheIsLiked ? cacheLikes - 1 : cacheLikes + 1,
+    //       },
+    //     });
+    //   }
+    // }
+    // way 2 - modify
+
+    if (ok) {
+      const shopId = `CoffeeShop:${id}`;
+      cache.modify({
+        id: shopId,
+        fields: {
+          isLiked(prev) {
+            return !prev;
+          },
+          likes(prev) {
+            if (isLiked) {
+              return prev - 1;
+            }
+            return prev + 1;
+          },
+        },
+      });
+    }
+  };
+
+  const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_MUTATION, {
+    variables: { id },
+    update: updateToggleLike,
+  });
+
+  const goToShopDetail = () => {
+    navigation.navigate("ShopDetail", {
+      id,
+      categories,
+      isMine,
+      latitude,
+      longitude,
+      name,
+      photos,
+      user,
+      likes,
+    });
+  };
 
   return (
-    <Container key={id}>
+    <Container key={id} onPress={goToShopDetail}>
       <Column>
         <PhotoContainer>
-          {photos[0]?.url ? (
+          {/* {photos[0]?.url ? (
             <File
               resizeMode="cover"
               style={{
@@ -96,7 +189,22 @@ export default function CoffeeShop(props) {
                 padding: 0,
               }}
             />
-          )}
+          )} */}
+          <File
+            key={Math.random()}
+            source={{ uri: "https://picsum.photos/200" }}
+            style={{
+              //   width: width,
+              padding: 0,
+            }}
+          />
+          <LikeButton onPress={toggleLikeMutation}>
+            <Ionicons
+              name={isLiked ? "bookmark" : "bookmark-outline"}
+              color={isLiked ? "pink" : "white"}
+              size={20}
+            />
+          </LikeButton>
         </PhotoContainer>
       </Column>
       <Column>
@@ -107,7 +215,9 @@ export default function CoffeeShop(props) {
             <Maps latitude={latitude} longitude={longitude} />
           </ShopLocation>
           <ShopName>{name}</ShopName>
+
           <ShopCategories>
+            {/* <Username>posted by{}</Username> */}
             {categories
               ? categories.map((category, index) => (
                   <ShopCategory key={category.id + index}>

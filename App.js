@@ -10,6 +10,9 @@ import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AsyncStorageWrapper, persistCache } from "apollo3-cache-persist";
 import Navigation from "./navigators/Navigation";
+import { Appearance } from "react-native";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./styles";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -50,14 +53,18 @@ export default function App() {
     );
   }
 
+  const light = Appearance.getColorScheme() === "light";
+
   return (
     <ApolloProvider client={client}>
-      <AppearanceProvider>
-        <NavigationContainer>
-          {/* {isLoggedIn ? <LoggedInNav /> : <LoggedOutNav />} */}
-          <Navigation isLoggedIn={isLoggedIn} />
-        </NavigationContainer>
-      </AppearanceProvider>
+      <ThemeProvider theme={light ? lightTheme : darkTheme}>
+        <AppearanceProvider>
+          <NavigationContainer>
+            {/* {isLoggedIn ? <LoggedInNav /> : <LoggedOutNav />} */}
+            <Navigation isLoggedIn={isLoggedIn} />
+          </NavigationContainer>
+        </AppearanceProvider>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
