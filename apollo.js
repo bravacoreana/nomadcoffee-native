@@ -28,12 +28,8 @@ export const logUserOut = async () => {
 };
 
 const onErrorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    console.log(`[GraphQL Error]`, graphQLErrors);
-  }
-  if (networkError) {
-    console.log("[Network Error]", networkError);
-  }
+  if (graphQLErrors) console.log(`[GraphQL Error]`, graphQLErrors);
+  if (networkError) console.log("[Network Error]", networkError);
 });
 
 const uploadHttpLink = createUploadLink({
@@ -53,7 +49,7 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
+// const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -75,7 +71,7 @@ export const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLinks),
+  link: authLink.concat(onErrorLink).concat(uploadHttpLink),
   cache,
 });
 
