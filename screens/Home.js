@@ -4,34 +4,7 @@ import { FlatList, RefreshControl } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import ScreenLayout from "../components/ScreenLayout";
 import CoffeeShop from "../components/CoffeeShop";
-
-const FEED_QUERY = gql`
-  query seeCoffeeShops($page: Int) {
-    seeCoffeeShops(page: $page) {
-      shops {
-        id
-        name
-        latitude
-        longitude
-        user {
-          username
-          avatar
-        }
-        categories {
-          id
-          name
-        }
-        photos {
-          id
-          url
-        }
-        isMine
-      }
-      shopsCount
-      lastPage
-    }
-  }
-`;
+import { FEED_QUERY } from "../queries";
 
 const CoffeeShops = styled.View`
   margin-top: 20px;

@@ -8,7 +8,7 @@ import LogIn from "../screens/LogIn";
 
 const Tabs = createBottomTabNavigator();
 
-export default function TabsNav({ isLoggedIn }) {
+export default function TabsNav() {
   const { data } = useMe();
 
   return (
@@ -18,8 +18,8 @@ export default function TabsNav({ isLoggedIn }) {
         showLabel: false,
         style: {
           borderTopColor: "rgba(255,255,255,0.2)",
-          // backgroundColor: (props) => props.backgroundColor,
           backgroundColor: "black",
+          // backgroundColor: (props) => props.backgroundColor,
         },
       }}
     >
@@ -87,9 +87,7 @@ export default function TabsNav({ isLoggedIn }) {
             ),
         }}
       >
-        {() =>
-          isLoggedIn ? <SharedStackNav screenName="Profile" /> : <LogIn />
-        }
+        {() => (data?.me ? <SharedStackNav screenName="Profile" /> : <LogIn />)}
       </Tabs.Screen>
     </Tabs.Navigator>
   );

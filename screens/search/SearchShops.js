@@ -1,23 +1,35 @@
-import React from "react";
-import { gql, useLazyQuery } from "@apollo/client";
-import { View } from "react-native";
-import styled from "styled-components/native";
-
-import { SHOP_FRAGMENT } from "../../fragments";
+import React, { useState } from "react";
+import { FlatList, RefreshControl, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { SearchMessage } from "../../components/search/Messages";
+import CoffeeShop from "../../components/CoffeeShop";
 
-const SEARCH_SHOPS = gql`
-  query searchCoffeeShop($keyword: String!) {
-    searchCoffeeShop(keyword: $keyword) {
-      ...ShopFragment
+export default function SearchShops({ loading, data, refetch, called }) {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onEndReached = () => {
+    if (data?.seeCoffeeShops?.shops && page < data.seeCoffeeShops.lastPage) {
+      setPage((prev) => {
+        const nextPage = prev + 1;
+        fetchMore({
+          variables: {
+            page: nextPage,
+          },
+        });
+        return nextPage;
+      });
     }
-  }
-  ${SHOP_FRAGMENT}
-`;
+  };
 
-export default function SearchShops({ navigation }) {
-  const [startQueryFn, { loading, data, called }] = useLazyQuery(SEARCH_SHOPS);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+
+  const renderShop = ({ item: shop }) => {
+    return <CoffeeShop {...shop} key={shop.id} />;
+  };
 
   return (
     <DismissKeyboard>
@@ -26,6 +38,29 @@ export default function SearchShops({ navigation }) {
         {!called && (
           <SearchMessage message="Search by keyword!" indicator={false} />
         )}
+
+        {data?.searchCoffeeShop !== undefined ? (
+          data?.searchCoffeeShop.length === 0 ? (
+            <SearchMessage message="No data!" indicator={false} />
+          ) : (
+            <FlatList
+              style={{ width: "100%" }}
+              onEndReachedThreshold={0.05}
+              onEndReached={onEndReached}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  tintColor="white"
+                />
+              }
+              showsVerticalScrollIndicator={false}
+              data={data?.searchCoffeeShop}
+              renderItem={renderShop}
+              keyExtractor={(shop) => "" + shop.id}
+            />
+          )
+        ) : null}
       </View>
     </DismissKeyboard>
   );

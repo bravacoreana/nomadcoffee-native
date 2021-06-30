@@ -1,113 +1,101 @@
-import React, { useEffect } from "react";
-import { gql, useLazyQuery } from "@apollo/client";
-import { View, ActivityIndicator, useWindowDimensions } from "react-native";
+import React, { useState } from "react";
 import styled from "styled-components/native";
-import { useForm } from "react-hook-form";
-import { SHOP_FRAGMENT } from "../../fragments";
+import {
+  View,
+  Text,
+  User,
+  Image,
+  FlatList,
+  RefreshControl,
+} from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
-import CoffeeShop from "../../components/CoffeeShop";
-// import CoffeeShop from "../../components/CoffeeShop";
+import { SearchMessage } from "../../components/search/Messages";
+import TabIcon from "../../components/nav/TabIcons";
+import ScreenLayout from "../../components/ScreenLayout";
 
-const SEARCH_SHOPS = gql`
-  query searchCoffeeShop($keyword: String!) {
-    searchCoffeeShop(keyword: $keyword) {
-      ...ShopFragment
-    }
-  }
-  ${SHOP_FRAGMENT}
-`;
-
-const Input = styled.TextInput`
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  background-color: rgba(255, 255, 255, 0.3);
-  width: ${(props) => props.width / 1.2}px;
-  padding: 10px;
-  color: white;
-  border-radius: 20px;
-`;
-
-const MessageContainer = styled.View`
-  justify-content: center;
+const ProfileContainer = styled.TouchableOpacity`
+  flex-direction: row;
   align-items: center;
-  flex: 1;
+  padding: 20px;
 `;
-const MessageText = styled.Text`
-  color: white;
+const Avatar = styled.Image`
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+`;
+const UsernameText = styled.Text`
+  margin-left: 10px;
   font-weight: 600;
-  margin-top: 20px;
+  color: white;
 `;
 
-const ResultContainer = styled.View`
-  margin-top: 20px;
-`;
+export default function SearchUsers({ loading, data, called, refetch }) {
+  const [refreshing, setRefreshing] = useState(false);
 
-export default function SearchUsers({ navigation }) {
-  const { width } = useWindowDimensions();
-  const { register, setValue, watch, handleSubmit } = useForm();
-  const [startQueryFn, { loading, data, called }] = useLazyQuery(SEARCH_SHOPS);
-
-  const onValid = ({ keyword }) => {
-    startQueryFn({
-      variables: {
-        keyword,
-      },
-    });
+  const onEndReached = () => {
+    if (data?.searchUsers && page < data.searchUsers.lastPage) {
+      setPage((prev) => {
+        const nextPage = prev + 1;
+        fetchMore({
+          variables: {
+            page: nextPage,
+          },
+        });
+        return nextPage;
+      });
+    }
   };
 
-  const SearchBox = () => (
-    <Input
-      width={width}
-      placeholderTextColor="rgba(255,255,255,0.5)"
-      placeholder="Search"
-      autoCapitalize="none"
-      returnKeyLabel="Search"
-      returnKeyType="search"
-      autoCorrect={false}
-      onChangeText={(text) => setValue("keyword", text)}
-      onSubmitEditing={handleSubmit(onValid)}
-    />
-  );
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: SearchBox,
-    });
-    register("keyword", {
-      required: "true",
-    });
-  }, []);
-  const renderItem = ({ item: coffeeShop }) => <CoffeeShop {...coffeeShop} />;
-
+  const renderUser = ({ item: user }) => {
+    return (
+      <ProfileContainer>
+        {user.avatar ? (
+          <Avatar source={{ uri: user.avatar }} />
+        ) : (
+          <TabIcon iconName={"person"} color="white" /> // focused={focused}
+        )}
+        <UsernameText>{user.username}</UsernameText>
+      </ProfileContainer>
+    );
+  };
   return (
     <DismissKeyboard>
-      <View style={{ flex: 1, backgroundColor: "black" }}>
-        {loading ? (
-          <MessageContainer>
-            <ActivityIndicator />
-            <MessageText>Searching...</MessageText>
-          </MessageContainer>
-        ) : null}
-        {!called ? (
-          <MessageContainer>
-            <MessageText>Search by keyword</MessageText>
-          </MessageContainer>
-        ) : null}
-        {data?.searchCoffeeShop !== undefined ? (
-          data?.searchCoffeeShop?.length === 0 ? (
-            <MessageContainer>
-              <MessageText>No data</MessageText>
-            </MessageContainer>
+      {/* <View style={{ flex: 1, backgroundColor: "black" }} loading={loading}> */}
+      <ScreenLayout loading={loading}>
+        {loading && <SearchMessage message="Searching" indicator={true} />}
+        {!called && (
+          <SearchMessage message="Search by keyword!" indicator={false} />
+        )}
+
+        {data?.searchUsers !== undefined ? (
+          data?.searchUsers.length === 0 ? (
+            <SearchMessage message="No data!" indicator={false} />
           ) : (
-            <ResultContainer>
-              <FlatList
-                data={data?.searchCoffeeShop}
-                keyExtractor={(coffeeShop) => coffeeShop.id}
-                renderItem={renderItem}
-              />
-            </ResultContainer>
+            <FlatList
+              style={{ width: "100%" }}
+              onEndReachedThreshold={0.05}
+              // onEndReached={onEndReached}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  tintColor="white"
+                />
+              }
+              showsVerticalScrollIndicator={false}
+              data={data?.searchUsers}
+              renderItem={renderUser}
+              keyExtractor={(user) => "" + user.id}
+            />
           )
         ) : null}
-      </View>
+      </ScreenLayout>
     </DismissKeyboard>
   );
 }

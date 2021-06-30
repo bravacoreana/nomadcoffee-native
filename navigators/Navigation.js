@@ -1,72 +1,42 @@
 import React from "react";
-import TabIcon from "../components/nav/TabIcons";
-import SharedStackNav from "./SharedStackNav";
-import useMe from "../hooks/useMe";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image } from "react-native";
-import LogIn from "../screens/LogIn";
+import { createStackNavigator } from "@react-navigation/stack";
+import TabsNav from "./TabsNav";
+import UploadNav from "./UploadNav";
+import CreateShopForm from "../screens/CreateaShopForm";
+import styled from "styled-components/native";
 
-const Tabs = createBottomTabNavigator();
-
-export default function Navigation({ isLoggedIn }) {
-  const { data } = useMe();
-
+const Stack = createStackNavigator();
+const Button = styled.Button``;
+export default function Navigation({ navigation }) {
   return (
-    <Tabs.Navigator
-      tabBarOptions={{
-        activeTintColor: "white",
-        showLabel: false,
-        style: {
-          borderTopColor: "rgba(255,255,255,0.2)",
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
           backgroundColor: "black",
         },
       }}
     >
-      <Tabs.Screen
-        name="Home"
+      <Stack.Screen
+        name="Tabs"
+        component={TabsNav}
         options={{
-          tabBarIcon: ({ focused, color }) => (
-            <TabIcon iconName={"ios-home"} color={color} focused={focused} />
-          ),
+          headerShown: false,
         }}
-      >
-        {() => <SharedStackNav screenName="Home" />}
-      </Tabs.Screen>
-
-      <Tabs.Screen
-        name="Search"
+      />
+      <Stack.Screen
+        name="UploadPhoto"
+        component={UploadNav}
         options={{
-          tabBarIcon: ({ focused, color }) => (
-            <TabIcon iconName={"ios-search"} color={color} focused={focused} />
-          ),
+          headerShown: false,
         }}
-      >
-        {() => <SharedStackNav screenName="Search" />}
-      </Tabs.Screen>
-
-      <Tabs.Screen
-        name="Profile"
+      />
+      <Stack.Screen
+        name="CreateShopForm"
+        component={CreateShopForm}
         options={{
-          tabBarIcon: ({ focused, color }) =>
-            data?.me?.avatar ? (
-              <Image
-                source={{ uri: data.me.avatar }}
-                style={{
-                  height: 30,
-                  width: 30,
-                  borderRadius: 15,
-                  ...(focused && { borderColor: "white", borderWidth: 1 }),
-                }}
-              />
-            ) : (
-              <TabIcon iconName={"person"} color={color} focused={focused} />
-            ),
+          headerRight: () => <Button title="Post" />,
         }}
-      >
-        {() =>
-          isLoggedIn ? <SharedStackNav screenName="Profile" /> : <LogIn />
-        }
-      </Tabs.Screen>
-    </Tabs.Navigator>
+      />
+    </Stack.Navigator>
   );
 }

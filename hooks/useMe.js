@@ -17,7 +17,7 @@ export default function useMe() {
   const { data, error } = useQuery(ME_QUERY, {
     skip: !hasToken,
   });
-  if (error) console.log(error);
+  error && console.error(error);
 
   useEffect(() => {
     if (data?.me === null) {
