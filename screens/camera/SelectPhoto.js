@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-// import { colors } from "../colors";
 import { StatusBar } from "expo-status-bar";
 
 const Container = styled.View`
@@ -76,7 +75,7 @@ export default function SelectPhoto({ navigation }) {
   const HeaderRight = () => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("UploadPhoto", {
+        navigation.navigate("CreateShopForm", {
           file: selectedPhoto,
         })
       }

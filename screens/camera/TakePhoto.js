@@ -1,11 +1,11 @@
-import { Camera } from "expo-camera";
 import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components/native";
+import * as MediaLibrary from "expo-media-library";
+import { Camera } from "expo-camera";
 import { Ionicons } from "@expo/vector-icons";
 import { Alert, Image, Text, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
 import Slider from "@react-native-community/slider";
 import { StatusBar } from "expo-status-bar";
-import * as MediaLibrary from "expo-media-library";
 import { useIsFocused } from "@react-navigation/core";
 
 const Container = styled.View`
