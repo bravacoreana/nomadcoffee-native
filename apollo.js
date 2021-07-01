@@ -8,6 +8,7 @@ import { setContext } from "@apollo/client/link/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createUploadLink } from "apollo-upload-client";
 import { onError } from "@apollo/client/link/error";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 // import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const TOKEN = "token";
@@ -65,6 +66,10 @@ export const cache = new InMemoryCache({
             };
           },
         },
+        searchCoffeeShop: offsetLimitPagination(),
+        searchShopName: offsetLimitPagination(),
+        searchCategories: offsetLimitPagination(),
+        searchUsers: offsetLimitPagination(),
       },
     },
   },
@@ -76,3 +81,13 @@ const client = new ApolloClient({
 });
 
 export default client;
+
+// updateQuery: (previousResult, { fetchMoreResult }) => {
+//   if (!fetchMoreResult) return previousResult;
+//   return Object.assign({}, previousResult, {
+//     posts: {
+//       ...previousResult.posts,
+//       post: [...previousResult.posts.post, ...fetchMoreResult.posts.post]
+//     }
+//   });
+// }

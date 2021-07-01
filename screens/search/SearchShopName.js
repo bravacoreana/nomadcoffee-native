@@ -3,23 +3,25 @@ import { FlatList, RefreshControl, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { SearchMessage } from "../../components/search/Messages";
 import CoffeeShop from "../../components/CoffeeShop";
+import ScreenLayout from "../../components/ScreenLayout";
 
-export default function SearchShopName({ loading, data, refetch, called }) {
+export default function SearchShopName({
+  loading,
+  data,
+  refetch,
+  called,
+  fetchMore,
+}) {
   const [refreshing, setRefreshing] = useState(false);
-  const onEndReached = () => {
-    if (data?.seeCoffeeShops?.shops && page < data.seeCoffeeShops.lastPage) {
-      setPage((prev) => {
-        const nextPage = prev + 1;
-        fetchMore({
-          variables: {
-            page: nextPage,
-          },
-        });
-        return nextPage;
-      });
-    }
-  };
 
+  const onEndReached = () => {
+    if (fetchMore !== undefined)
+      fetchMore({
+        variables: {
+          offset: data?.searchShopName?.length,
+        },
+      });
+  };
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
@@ -32,7 +34,7 @@ export default function SearchShopName({ loading, data, refetch, called }) {
 
   return (
     <DismissKeyboard>
-      <View style={{ flex: 1, backgroundColor: "black" }}>
+      <ScreenLayout>
         {loading && <SearchMessage message="Searching" indicator={true} />}
         {!called && (
           <SearchMessage message="Search by keyword!" indicator={false} />
@@ -60,7 +62,7 @@ export default function SearchShopName({ loading, data, refetch, called }) {
             />
           )
         ) : null}
-      </View>
+      </ScreenLayout>
     </DismissKeyboard>
   );
 }

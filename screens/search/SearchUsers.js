@@ -1,49 +1,55 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import {
-  View,
-  Text,
-  User,
-  Image,
-  FlatList,
-  RefreshControl,
-} from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { SearchMessage } from "../../components/search/Messages";
-import TabIcon from "../../components/nav/TabIcons";
+import { Ionicons } from "@expo/vector-icons";
 import ScreenLayout from "../../components/ScreenLayout";
 
-const ProfileContainer = styled.TouchableOpacity`
+const Container = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   padding: 20px;
 `;
+
+const IconContainer = styled.View`
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.13);
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+`;
+
 const Avatar = styled.Image`
   height: 50px;
   width: 50px;
   border-radius: 25px;
 `;
+
 const UsernameText = styled.Text`
-  margin-left: 10px;
+  margin-left: 20px;
   font-weight: 600;
   color: white;
+  font-size: 16px;
 `;
 
-export default function SearchUsers({ loading, data, called, refetch }) {
+export default function SearchUsers({
+  loading,
+  data,
+  called,
+  refetch,
+  fetchMore,
+}) {
   const [refreshing, setRefreshing] = useState(false);
 
   const onEndReached = () => {
-    if (data?.searchUsers && page < data.searchUsers.lastPage) {
-      setPage((prev) => {
-        const nextPage = prev + 1;
-        fetchMore({
-          variables: {
-            page: nextPage,
-          },
-        });
-        return nextPage;
+    if (fetchMore !== undefined)
+      fetchMore({
+        variables: {
+          offset: data?.searchUsers?.length,
+        },
       });
-    }
   };
 
   const onRefresh = async () => {
@@ -54,20 +60,21 @@ export default function SearchUsers({ loading, data, called, refetch }) {
 
   const renderUser = ({ item: user }) => {
     return (
-      <ProfileContainer>
-        {user.avatar ? (
-          <Avatar source={{ uri: user.avatar }} />
-        ) : (
-          <TabIcon iconName={"person"} color="white" /> // focused={focused}
-        )}
+      <Container>
+        <IconContainer>
+          {user.avatar ? (
+            <Avatar source={{ uri: user.avatar }} />
+          ) : (
+            <Ionicons name="person-outline" color="white" size={30} />
+          )}
+        </IconContainer>
         <UsernameText>{user.username}</UsernameText>
-      </ProfileContainer>
+      </Container>
     );
   };
   return (
     <DismissKeyboard>
-      {/* <View style={{ flex: 1, backgroundColor: "black" }} loading={loading}> */}
-      <ScreenLayout loading={loading}>
+      <ScreenLayout>
         {loading && <SearchMessage message="Searching" indicator={true} />}
         {!called && (
           <SearchMessage message="Search by keyword!" indicator={false} />
@@ -80,7 +87,7 @@ export default function SearchUsers({ loading, data, called, refetch }) {
             <FlatList
               style={{ width: "100%" }}
               onEndReachedThreshold={0.05}
-              // onEndReached={onEndReached}
+              onEndReached={onEndReached}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
