@@ -4,9 +4,10 @@ import DismissKeyboard from "../components/DismissKeyboard";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { ReactNativeFile } from "apollo-upload-client";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { TouchableOpacity } from "react-native";
+// import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { ActivityIndicator, TouchableOpacity } from "react-native";
 import { CREATE_SHOP_MUTATION } from "../queries/shopQueries";
+// import MapsAddress from "../components/ReGeoCoder";
 
 const Container = styled.View`
   flex: 1;
@@ -69,11 +70,28 @@ const LoadingContainer = styled.View`
 `;
 
 export default function CreateShopForm({ navigation, route }) {
-  const { register, handleSubmit, setValue, watch, getValues } = useForm();
+  const { register, handleSubmit, setValue, watch, getValues } = useForm({
+    defaultValues: {
+      latitude: "" + route?.params?.latitude,
+      longitude: "" + route?.params?.longitude,
+    },
+  });
   const updateShop = (cache, result) => {
     const {
       data: { createCoffeeShop },
     } = result;
+
+    if (createCoffeeShop.ok) {
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: {
+          seeCoffeeShops(prev) {
+            [createCoffeeShop, ...prev];
+          },
+        },
+      });
+      navigation.navigate("Tabs");
+    }
   };
   const [createShopMutation, { loading }] = useMutation(CREATE_SHOP_MUTATION, {
     update: updateShop,
@@ -94,12 +112,14 @@ export default function CreateShopForm({ navigation, route }) {
     // const { caption, name, latitude, longitude, categories } = getValues();
 
     createShopMutation({
-      name,
-      photos: file,
-      caption,
-      categories,
-      latitude,
-      longitude,
+      variables: {
+        name,
+        photos: file,
+        caption,
+        categories,
+        latitude,
+        longitude,
+      },
     });
   };
 
@@ -117,6 +137,10 @@ export default function CreateShopForm({ navigation, route }) {
       ...(loading && { headerLeft: () => null }),
     });
   }, []);
+
+  const goToMap = () => {
+    navigation.navigate("FindAddress");
+  };
 
   return (
     <DismissKeyboard>
@@ -154,20 +178,21 @@ export default function CreateShopForm({ navigation, route }) {
             />
             <TextForm
               placeholder="Add address"
-              value={watch("latitude")}
+              value={"" + route?.params?.latitude || watch("latitude")}
               returnKeyType="next"
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("latitude", text)}
             />
             <TextForm
               placeholder="Add address"
-              value={watch("longitude")}
+              value={"" + route?.params?.longitude || watch("longitude")}
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("longitude", text)}
               returnKeyType="done"
             />
-            <Button title="Add location" />
+            <Button title="Find your location on map" onPress={goToMap} />
           </BottomColumn>
+          {/* <MapsAddress /> */}
         </Container>
       ) : (
         <LoadingContainer>
@@ -177,16 +202,3 @@ export default function CreateShopForm({ navigation, route }) {
     </DismissKeyboard>
   );
 }
-
-// {/* <MapView
-// provider={PROVIDER_GOOGLE}
-// style={{
-//   height: "100%",
-// }}
-// region={{
-//   latitude: 37.78825,
-//   longitude: -122.4324,
-//   latitudeDelta: 0.035,
-//   longitudeDelta: 0.035,
-// }}
-// /> */}

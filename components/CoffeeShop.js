@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Maps from "./GeoCoder";
 import { useNavigation } from "@react-navigation/native";
 import { gql, useMutation } from "@apollo/client";
+import ShopCategoryComponent from "./Category";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -54,8 +55,6 @@ const ShopName = styled.Text`
   margin-top: 10px;
 `;
 
-const Username = styled.Text``;
-
 const ShopLocation = styled.Text`
   text-align: right;
   color: white;
@@ -80,6 +79,7 @@ const Category = styled.Text`
 `;
 
 export default function CoffeeShop(props) {
+  console.log(props);
   const {
     id,
     categories,
@@ -91,44 +91,18 @@ export default function CoffeeShop(props) {
     user,
     likes,
     isLiked,
+    caption,
   } = props;
   const { width, height, scale } = useWindowDimensions();
   const navigation = useNavigation();
 
   const updateToggleLike = (cache, result) => {
+    console.log(cache);
     const {
       data: {
         toggleLike: { ok },
       },
     } = result;
-    // way 1 - manuel
-    // if (ok) {
-    //   const fragmentId = `CoffeeShop:${id}`;
-    //   const fragment = gql`
-    //     fragment BSName on CoffeeShop {
-    //       isLiked
-    //       likes
-    //     }
-    //   `;
-    //   const result = cache.readFragment({
-    //     id: fragmentId,
-    //     fragment,
-    //   });
-
-    //   if ("isLiked" in result && "likes" in result) {
-    //     const { isLiked: cacheIsLiked, likes: cacheLikes } = result;
-    //     cache.writeFragment({
-    //       id: fragmentId,
-    //       fragment,
-    //       data: {
-    //         isLiked: !cacheIsLiked,
-    //         likes: cacheIsLiked ? cacheLikes - 1 : cacheLikes + 1,
-    //       },
-    //     });
-    //   }
-    // }
-    // way 2 - modify
-
     if (ok) {
       const shopId = `CoffeeShop:${id}`;
       cache.modify({
@@ -164,6 +138,7 @@ export default function CoffeeShop(props) {
       photos,
       user,
       likes,
+      caption,
     });
   };
 
@@ -171,25 +146,6 @@ export default function CoffeeShop(props) {
     <Container key={id} onPress={goToShopDetail}>
       <Column>
         <PhotoContainer>
-          {/* {photos[0]?.url ? (
-            <File
-              resizeMode="cover"
-              style={{
-                //   width: width,
-                padding: 0,
-              }}
-              source={{ uri: photos[0].url }}
-            />
-          ) : (
-            <File
-              key={Math.random()}
-              source={{ uri: "https://picsum.photos/200" }}
-              style={{
-                //   width: width,
-                padding: 0,
-              }}
-            />
-          )} */}
           <File
             key={Math.random()}
             source={{ uri: "https://picsum.photos/200" }}
@@ -220,9 +176,10 @@ export default function CoffeeShop(props) {
             {/* <Username>posted by{}</Username> */}
             {categories
               ? categories.map((category, index) => (
-                  <ShopCategory key={category.id + index}>
-                    <Category>#{category.name}</Category>
-                  </ShopCategory>
+                  // <ShopCategory key={category.id + index}>
+                  //   <Category>#{category.name}</Category>
+                  // </ShopCategory>
+                  <ShopCategoryComponent {...category} />
                 ))
               : null}
           </ShopCategories>
@@ -242,156 +199,22 @@ export default function CoffeeShop(props) {
 //   }
 // `;
 
-// const Container = styled.View`
-//   padding-bottom: 20px;
-// `;
-// const Header = styled.View`
-//   padding: 5px;
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: space-between;
-// `;
-
-// const HeaderLeft = styled.View`
-//   flex-direction: row;
-//   align-items: center;
-// `;
-// const HeaderRight = styled.View`
-//   align-items: center;
-//   margin-right: 5px;
-// `;
-
-// const UserAvatar = styled.Image`
-//   margin-right: 10px;
-//   width: 40px;
-//   height: 40px;
-//   border-radius: 20px;
-// `;
-// const Username = styled.Text`
-//   color: white;
-//   font-weight: 600;
-// `;
-// const File = styled.Image`
-//   aspect-ratio: 1.25;
-// `;
-// const Actions = styled.View`
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: space-between;
-// `;
-// const Action = styled.TouchableOpacity`
-//   margin-right: 5px;
-// `;
-// const Likes = styled.Text`
-//   color: white;
-//   margin: 7px 0px;
-//   font-weight: 600;
-// `;
-// const Caption = styled.View`
-//   flex-direction: row;
-// `;
-
-// const Column = styled.TouchableOpacity`
-//   width: 100%;
-//   flex-direction: row;
-//   justify-content: flex-end;
-// `;
-// const CategoryBox = styled.View`
-//   color: white;
-//   font-weight: 600;
-//   background-color: rgba(255, 192, 203, 0.75);
-//   border-radius: 20px;
-// `;
-
-// const FeedLeft = styled.View`
-//   flex-direction: row;
-//   align-items: center;
-//   margin-left: 5px;
-// `;
-// const FeedRight = styled.View`
-//   align-items: center;
-//   margin-right: 5px;
-// `;
-
-// const Category = styled.Text`
-//   color: white;
-//   font-weight: 600;
-//   text-align: center;
-//   padding: 7px 10px;
-// `;
-
-// const FeedContainer = styled.View`
-//   padding-top: 5px;
-//   margin-bottom: 20px;
-// `;
-
-// export default function CoffeeShop(props) {
-//   const { id, categories, isMine, latitude, longitude, name, photos, user } =
-//     props;
-//   const { width, height, scale } = useWindowDimensions();
-
-//   return (
-//     <Container key={id}>
-//       <Header>
-//         <TouchableOpacity>
-//           <HeaderLeft>
-//             <UserAvatar resizeMode="cover" source={{ uri: user.avatar }} />
-//             <Username>{name}</Username>
-//           </HeaderLeft>
-//         </TouchableOpacity>
-//         <TouchableOpacity>
-//           <HeaderRight>
-//             <CategoryBox>
-//               {categories
-//                 ? categories.map((category) => (
-//                     <TouchableOpacity key={category.id}>
-//                       <Category>#{category.name}</Category>
-//                     </TouchableOpacity>
-//                   ))
-//                 : null}
-//             </CategoryBox>
-//           </HeaderRight>
-//         </TouchableOpacity>
-//       </Header>
-
-//       {photos[0]?.url ? (
-//         <File
-//           resizeMode="contain"
-//           style={{
-//             width: width,
-//             padding: 0,
-//           }}
-//           source={{ uri: photos[0].url }}
-//         />
-//       ) : (
-//         <File
-//           key={Math.random()}
-//           source={{ uri: "https://picsum.photos/200" }}
-//           style={{
-//             width: width,
-//             padding: 0,
-//           }}
-//         />
-//       )}
-
-//       <FeedContainer>
-//         <Actions>
-//           <FeedLeft>
-//             <Action>
-//               <Ionicons name="heart-outline" color="white" size={20} />
-//             </Action>
-//             <Action>
-//               <Ionicons name="chatbubble-outline" color="white" size={18} />
-//             </Action>
-//           </FeedLeft>
-//           <FeedRight>
-//             <Text style={{ color: "white", alignItems: "center" }}>
-//               <Ionicons name="location-outline" color="white" size={20} />
-//               {latitude}, {longitude}
-//             </Text>
-//           </FeedRight>
-//         </Actions>
-//       </FeedContainer>
-//     </Container>
-//   );
-// }
+// {photos[0]?.url ? (
+//   <File
+//     resizeMode="cover"
+//     style={{
+//       //   width: width,
+//       padding: 0,
+//     }}
+//     source={{ uri: photos[0].url }}
+//   />
+// ) : (
+//   <File
+//     key={Math.random()}
+//     source={{ uri: "https://picsum.photos/200" }}
+//     style={{
+//       //   width: width,
+//       padding: 0,
+//     }}
+//   />
+// )}

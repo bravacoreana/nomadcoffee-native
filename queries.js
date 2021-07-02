@@ -1,36 +1,26 @@
 import gql from "graphql-tag";
-import { SHOP_FRAGMENT } from "./fragments";
+import { FEED_FRAGMENT, SHOP_FRAGMENT } from "./fragments";
 
-export const FEED_QUERY = gql`
-  query seeCoffeeShops($page: Int) {
-    seeCoffeeShops(page: $page) {
-      shops {
-        id
-        name
-        latitude
-        longitude
-        user {
-          username
-          avatar
-        }
-        caption
-        categories {
-          id
-          name
-        }
-        photos {
-          id
-          url
-        }
-        likes
-        isLiked
-        isMine
-      }
-      shopsCount
-      lastPage
+export const SEE_COFFEESHOPS_QUERY = gql`
+  query seeCoffeeShops($offset: Int!) {
+    seeCoffeeShops(offset: $offset) {
+      ...FeedFragment
     }
   }
+  ${FEED_FRAGMENT}
 `;
+// export const SEE_COFFEESHOPS_QUERY = gql`
+//   query seeCoffeeShops($page: Int) {
+//     seeCoffeeShops(page: $page) {
+//       shops {
+//         ...FeedFragment
+//       }
+//       shopsCount
+//       lastPage
+//     }
+//   }
+//   ${FEED_FRAGMENT}
+// `;
 
 export const SEARCH_GENERAL = gql`
   query searchCoffeeShop($keyword: String!) {
@@ -53,10 +43,11 @@ export const SEARCH_SHOPNAME = gql`
 export const SEARCH_CATEGORIES = gql`
   query searchCategories($keyword: String!) {
     searchCategories(keyword: $keyword) {
-      ...ShopFragment
+      id
+      slug
+      # totalShops
     }
   }
-  ${SHOP_FRAGMENT}
 `;
 
 export const SEARCH_USER = gql`

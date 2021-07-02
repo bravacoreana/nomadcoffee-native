@@ -35,14 +35,19 @@ const UserProfile = styled.View`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: #b09f7d;
-  padding: 120px 0px;
+  background-color: #000;
+  padding: 100px 0px;
 `;
 
 const Detail = styled.View`
   align-items: center;
 `;
-
+const AvatarContainer = styled.View`
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+`;
 const Avatar = styled.Image`
   height: 100px;
   width: 100px;
@@ -81,24 +86,29 @@ const Button = styled.Text`
 const DetailContainer = styled.View`
   width: 100%;
   justify-content: space-around;
-  background-color: #a57d45;
+  background-color: rgba(255, 255, 255, 0.2);
   flex: 1;
 `;
+
 const InfoBox = styled.View`
   width: 100%;
-  padding: 10px;
-  background-color: #a57d45;
-  margin-left: 20px;
+  margin: 0px 10px;
+  /* background-color: rgba(255, 255, 255, 0.2); */
 `;
 
 const Info = styled.Text`
-  /* width: 50%; */
   color: white;
   text-align: left;
   font-size: 20px;
   margin-left: 7px;
 `;
 
+const InfoPlaceHolder = styled.Text`
+  color: rgba(255, 255, 255, 0.3);
+  text-align: left;
+  font-size: 20px;
+  margin-left: 7px;
+`;
 export default function Profile({ navigation, route }) {
   const { data } = useMe();
 
@@ -119,7 +129,9 @@ export default function Profile({ navigation, route }) {
       {data?.me ? (
         <UserProfile>
           <Detail>
-            <Avatar source={{ uri: data.me.avatar }} />
+            <AvatarContainer>
+              <Avatar source={{ uri: data.me.avatar }} />
+            </AvatarContainer>
             <Content>
               {QueryData?.seeProfile?.bio ? QueryData?.seeProfile?.bio : null}
             </Content>
@@ -145,11 +157,19 @@ export default function Profile({ navigation, route }) {
         </InfoBox>
         <InfoBox>
           <ContentTitle>LOCATION</ContentTitle>
-          <Info>{QueryData?.seeProfile?.location}</Info>
+          {QueryData?.seeProfile?.location ? (
+            <Info>{QueryData?.seeProfile?.location}</Info>
+          ) : (
+            <InfoPlaceHolder>Not available</InfoPlaceHolder>
+          )}
         </InfoBox>
         <InfoBox>
           <ContentTitle>BIO</ContentTitle>
-          <Info>{QueryData?.seeProfile?.bio}</Info>
+          {QueryData?.seeProfile?.bio ? (
+            <Info>{QueryData?.seeProfile?.bio}</Info>
+          ) : (
+            <InfoPlaceHolder>Not available</InfoPlaceHolder>
+          )}
         </InfoBox>
       </DetailContainer>
     </ProfileContainer>

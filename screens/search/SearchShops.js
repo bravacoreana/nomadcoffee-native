@@ -36,10 +36,12 @@ export default function SearchShops({
   return (
     <DismissKeyboard>
       <ScreenLayout>
-        {loading && <SearchMessage message="Searching" indicator={true} />}
-        {!called && (
+        {loading ? (
+          <SearchMessage message="Searching" indicator={true} />
+        ) : null}
+        {!called ? (
           <SearchMessage message="Search by keyword!" indicator={false} />
-        )}
+        ) : null}
 
         {data?.searchCoffeeShop !== undefined ? (
           data?.searchCoffeeShop.length === 0 ? (
