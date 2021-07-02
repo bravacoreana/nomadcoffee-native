@@ -173,15 +173,12 @@ export default function CoffeeShop(props) {
           <ShopName>{name}</ShopName>
 
           <ShopCategories>
-            {/* <Username>posted by{}</Username> */}
-            {categories
-              ? categories.map((category, index) => (
-                  // <ShopCategory key={category.id + index}>
-                  //   <Category>#{category.name}</Category>
-                  // </ShopCategory>
-                  <ShopCategoryComponent {...category} key={index} />
-                ))
-              : null}
+            {categories ? (
+              <ShopCategoryComponent
+                {...categories[0]}
+                key={categories[0].id}
+              />
+            ) : null}
           </ShopCategories>
         </ShopContainer>
       </Column>
