@@ -56,13 +56,7 @@ export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        seeCoffeeShops: {
-          keyArgs: false,
-          merge(existing = [], incoming = []) {
-            return [...existing, ...incoming];
-          },
-        },
-
+        seeCoffeeShops: offsetLimitPagination(),
         searchCoffeeShop: offsetLimitPagination(),
         searchShopName: offsetLimitPagination(),
         searchCategories: offsetLimitPagination(),
@@ -78,24 +72,3 @@ const client = new ApolloClient({
 });
 
 export default client;
-
-// updateQuery: (previousResult, { fetchMoreResult }) => {
-//   if (!fetchMoreResult) return previousResult;
-//   return Object.assign({}, previousResult, {
-//     posts: {
-//       ...previousResult.posts,
-//       post: [...previousResult.posts.post, ...fetchMoreResult.posts.post]
-//     }
-//   });
-// }
-
-// seeCoffeeShops: offsetLimitPagination(),
-// seeCoffeeShops: {
-//   keyArgs: false,
-//   merge(existing = {}, incoming = {}) {
-//     return {
-//       ...incoming,
-//       shops: [...(existing.shops || []), ...incoming.shops],
-//     };
-//   },
-// },
