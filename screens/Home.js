@@ -4,11 +4,7 @@ import { FlatList, RefreshControl } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import ScreenLayout from "../components/ScreenLayout";
 import CoffeeShop from "../components/CoffeeShop";
-<<<<<<< HEAD
 import { SEE_COFFEESHOPS_QUERY } from "../queries";
-=======
-import { FEED_QUERY } from "../queries";
->>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
 const CoffeeShops = styled.View`
   margin-top: 20px;
@@ -35,7 +31,7 @@ export default function Home() {
   );
 
   const renderShop = ({ item: shop }) => {
-    return <CoffeeShop {...shop} key={shop.id} />;
+    return <CoffeeShop {...shop} key={"" + shop.id} />;
   };
 
   const onRefresh = async () => {

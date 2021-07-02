@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components/native";
 import * as MediaLibrary from "expo-media-library";
@@ -7,16 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Alert, Image, Text, TouchableOpacity } from "react-native";
 import Slider from "@react-native-community/slider";
 import { StatusBar } from "expo-status-bar";
-=======
-import { Camera } from "expo-camera";
-import React, { useState, useEffect, useRef } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { Alert, Image, Text, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
-import Slider from "@react-native-community/slider";
-import { StatusBar } from "expo-status-bar";
-import * as MediaLibrary from "expo-media-library";
->>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 import { useIsFocused } from "@react-navigation/core";
 
 const Container = styled.View`

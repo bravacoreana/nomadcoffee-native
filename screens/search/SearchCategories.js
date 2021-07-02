@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import { FlatList, RefreshControl, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
@@ -70,24 +69,10 @@ export default function SearchCategories({
   return (
     <DismissKeyboard>
       <ScreenLayout>
-=======
-import React from "react";
-import { gql, useLazyQuery } from "@apollo/client";
-import { View } from "react-native";
-import { SHOP_FRAGMENT } from "../../fragments";
-import DismissKeyboard from "../../components/DismissKeyboard";
-import { SearchMessage } from "../../components/search/Messages";
-
-export default function SearchCategories({ loading, data, refetch, called }) {
-  return (
-    <DismissKeyboard>
-      <View style={{ flex: 1, backgroundColor: "black" }}>
->>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
         {loading && <SearchMessage message="Searching" indicator={true} />}
         {!called && (
           <SearchMessage message="Search by keyword!" indicator={false} />
         )}
-<<<<<<< HEAD
 
         {data?.searchCategories !== undefined ? (
           data?.searchCategories.length === 0 ? (
@@ -112,9 +97,6 @@ export default function SearchCategories({ loading, data, refetch, called }) {
           )
         ) : null}
       </ScreenLayout>
-=======
-      </View>
->>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
     </DismissKeyboard>
   );
 }

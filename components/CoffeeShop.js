@@ -5,10 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Maps from "./GeoCoder";
 import { useNavigation } from "@react-navigation/native";
 import { gql, useMutation } from "@apollo/client";
-<<<<<<< HEAD
 import ShopCategoryComponent from "./Category";
-=======
->>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -182,7 +179,7 @@ export default function CoffeeShop(props) {
                   // <ShopCategory key={category.id + index}>
                   //   <Category>#{category.name}</Category>
                   // </ShopCategory>
-                  <ShopCategoryComponent {...category} />
+                  <ShopCategoryComponent {...category} key={index} />
                 ))
               : null}
           </ShopCategories>

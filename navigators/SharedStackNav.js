@@ -3,15 +3,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SearchNav from "./SearchNav";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
-<<<<<<< HEAD
 import ShopDetail from "../screens/ShopDetail";
 import CreateShopForm from "../screens/CreateShopForm";
 import { Ionicons } from "@expo/vector-icons";
 import FindAddress from "../screens/FindAddress";
-=======
-import SearchNav from "./SearchNav";
-import ShopDetail from "../screens/ShopDetail";
->>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
 const Stack = createStackNavigator();
 
