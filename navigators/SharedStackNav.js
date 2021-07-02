@@ -1,9 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import SearchNav from "./SearchNav";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
-import SearchNav from "./SearchNav";
 import ShopDetail from "../screens/ShopDetail";
+import CreateShopForm from "../screens/CreateShopForm";
+import { Ionicons } from "@expo/vector-icons";
+import FindAddress from "../screens/FindAddress";
 
 const Stack = createStackNavigator();
 
@@ -29,15 +32,7 @@ export default function ({ screenName }) {
       ) : null}
 
       {screenName === "Profile" ? (
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerStyle: {
-              backgroundColor: "#B09F7D",
-            },
-          }}
-        />
+        <Stack.Screen name="Profile" component={Profile} />
       ) : null}
       <Stack.Screen name="ShopDetail" component={ShopDetail} />
     </Stack.Navigator>

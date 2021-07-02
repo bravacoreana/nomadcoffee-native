@@ -36,8 +36,12 @@ export default function SearchNav({ navigation }) {
       data: dataGeneral,
       refetch: refetchGeneral,
       called: calledGeneral,
+      fetchMore: fetchMoreGeneral,
     },
-  ] = useLazyQuery(SEARCH_GENERAL);
+  ] = useLazyQuery(SEARCH_GENERAL, {
+    fetchPolicy: "no-cache",
+    variables: { offset: 0 },
+  });
 
   const [
     startQueryFnShopName,
@@ -46,8 +50,12 @@ export default function SearchNav({ navigation }) {
       data: dataShopName,
       refetch: refetchShopName,
       called: calledShopName,
+      fetchMore: fetchMoreShopName,
     },
-  ] = useLazyQuery(SEARCH_SHOPNAME);
+  ] = useLazyQuery(SEARCH_SHOPNAME, {
+    fetchPolicy: "no-cache",
+    variables: { offset: 0 },
+  });
 
   const [
     startQueryFnCategories,
@@ -56,8 +64,12 @@ export default function SearchNav({ navigation }) {
       data: dataCategories,
       refetch: refetchCategories,
       called: calledCategories,
+      fetchMore: fetchMoreCategories,
     },
-  ] = useLazyQuery(SEARCH_CATEGORIES);
+  ] = useLazyQuery(SEARCH_CATEGORIES, {
+    fetchPolicy: "no-cache",
+    variables: { offset: 0 },
+  });
 
   const [
     startQueryFnUsers,
@@ -66,8 +78,12 @@ export default function SearchNav({ navigation }) {
       data: dataUser,
       refetch: refetchUser,
       called: calledUser,
+      fetchMore: fetchMoreUser,
     },
-  ] = useLazyQuery(SEARCH_USER);
+  ] = useLazyQuery(SEARCH_USER, {
+    fetchPolicy: "no-cache",
+    variables: { offset: 0 },
+  });
 
   const onValid = ({ keyword }) => {
     startQueryFnGeneral({
@@ -138,6 +154,7 @@ export default function SearchNav({ navigation }) {
             data={dataGeneral}
             called={calledGeneral}
             refetch={refetchGeneral}
+            fetchMore={fetchMoreGeneral}
           />
         )}
       </Tab.Screen>
@@ -149,6 +166,7 @@ export default function SearchNav({ navigation }) {
             data={dataShopName}
             called={calledShopName}
             refetch={refetchShopName}
+            fetchMore={fetchMoreShopName}
           />
         )}
       </Tab.Screen>
@@ -160,6 +178,7 @@ export default function SearchNav({ navigation }) {
             data={dataCategories}
             called={calledCategories}
             refetch={refetchCategories}
+            fetchMore={fetchMoreCategories}
           />
         )}
       </Tab.Screen>
@@ -171,6 +190,7 @@ export default function SearchNav({ navigation }) {
             data={dataUser}
             called={calledUser}
             refetch={refetchUser}
+            fetchMore={fetchMoreUser}
           />
         )}
       </Tab.Screen>
