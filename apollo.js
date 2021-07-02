@@ -56,16 +56,13 @@ export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        // seeCoffeeShops: offsetLimitPagination(),
         seeCoffeeShops: {
           keyArgs: false,
-          merge(existing = {}, incoming = {}) {
-            return {
-              ...incoming,
-              shops: [...(existing.shops || []), ...incoming.shops],
-            };
+          merge(existing = [], incoming = []) {
+            return [...existing, ...incoming];
           },
         },
+
         searchCoffeeShop: offsetLimitPagination(),
         searchShopName: offsetLimitPagination(),
         searchCategories: offsetLimitPagination(),
@@ -91,3 +88,14 @@ export default client;
 //     }
 //   });
 // }
+
+// seeCoffeeShops: offsetLimitPagination(),
+// seeCoffeeShops: {
+//   keyArgs: false,
+//   merge(existing = {}, incoming = {}) {
+//     return {
+//       ...incoming,
+//       shops: [...(existing.shops || []), ...incoming.shops],
+//     };
+//   },
+// },
