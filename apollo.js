@@ -8,7 +8,10 @@ import { setContext } from "@apollo/client/link/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createUploadLink } from "apollo-upload-client";
 import { onError } from "@apollo/client/link/error";
+<<<<<<< HEAD
 import { offsetLimitPagination } from "@apollo/client/utilities";
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 // import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const TOKEN = "token";
@@ -29,8 +32,17 @@ export const logUserOut = async () => {
 };
 
 const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+<<<<<<< HEAD
   if (graphQLErrors) console.log(`[GraphQL Error]`, graphQLErrors);
   if (networkError) console.log("[Network Error]", networkError);
+=======
+  if (graphQLErrors) {
+    console.log(`[GraphQL Error]`, graphQLErrors);
+  }
+  if (networkError) {
+    console.log("[Network Error]", networkError);
+  }
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 });
 
 const uploadHttpLink = createUploadLink({
@@ -50,7 +62,11 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+<<<<<<< HEAD
 // const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
+=======
+const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -73,7 +89,11 @@ export const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
+<<<<<<< HEAD
   link: authLink.concat(onErrorLink).concat(uploadHttpLink),
+=======
+  link: authLink.concat(httpLinks),
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
   cache,
 });
 

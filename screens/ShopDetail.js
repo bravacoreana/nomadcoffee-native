@@ -3,7 +3,10 @@ import { View, Text } from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import Maps from "../components/GeoCoder";
+<<<<<<< HEAD
 import ShopCategoryComponent from "../components/Category";
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
 const Container = styled.View`
   background-color: black;
@@ -15,12 +18,18 @@ const PhotoContainer = styled.View`
 const Photo = styled.Image`
   aspect-ratio: 1.5;
   width: 100%;
+<<<<<<< HEAD
+=======
+
+  /* height: 61.35%; */
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 `;
 
 const CafeContainer = styled.View``;
 const UserContainer = styled.View``;
 const UserColumn = styled.View`
   flex-direction: row;
+<<<<<<< HEAD
   margin-top: 20px;
   align-items: center;
 `;
@@ -52,6 +61,19 @@ const Content = styled.Text`
 `;
 
 const ContentText = styled.Text`
+=======
+  padding: 15px;
+  align-items: center;
+`;
+
+const Column = styled.View`
+  flex-direction: row;
+`;
+const Title = styled.Text`
+  color: white;
+`;
+const Content = styled.Text`
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
   color: white;
 `;
 
@@ -61,7 +83,10 @@ const Avatar = styled.Image`
   border-radius: 20px;
   margin-right: 10px;
 `;
+<<<<<<< HEAD
 
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 export default function ShopDetail({ navigation, route }) {
   useEffect(() => {
     if (route?.params?.name) {
@@ -98,6 +123,7 @@ export default function ShopDetail({ navigation, route }) {
       <CafeContainer>
         <UserContainer>
           <UserColumn>
+<<<<<<< HEAD
             <AvatarContainer>
               {route?.params?.user?.avatar ? (
                 <Avatar source={{ uri: route.params.user.avatar }} />
@@ -146,6 +172,35 @@ export default function ShopDetail({ navigation, route }) {
               : null}
           </Column>
         </ContentContainer>
+=======
+            {route?.params?.user?.avatar ? (
+              <Avatar source={{ uri: route.params.user.avatar }} />
+            ) : (
+              <Ionicons color="white" name="person-outline" size={20} />
+            )}
+            <Content>{route?.params?.user?.username}</Content>
+          </UserColumn>
+        </UserContainer>
+        <Column>
+          <Ionicons color="white" name="navigate-outline" size={20} />
+          {route?.params?.latitude && route?.params?.longitude ? (
+            <Maps
+              latitude={route.params.latitude}
+              longitude={route.params.longitude}
+            />
+          ) : (
+            <Content>no place information</Content>
+          )}
+        </Column>
+        <Column>
+          <Ionicons color="white" name="heart-outline" size={20} />
+          <Content>{route?.params?.name}</Content>
+        </Column>
+        <Column>
+          <Title>Information: </Title>
+          <Content>{route?.params?.name}</Content>
+        </Column>
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
       </CafeContainer>
     </Container>
     // <View

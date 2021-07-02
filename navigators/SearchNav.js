@@ -36,12 +36,17 @@ export default function SearchNav({ navigation }) {
       data: dataGeneral,
       refetch: refetchGeneral,
       called: calledGeneral,
+<<<<<<< HEAD
       fetchMore: fetchMoreGeneral,
     },
   ] = useLazyQuery(SEARCH_GENERAL, {
     fetchPolicy: "no-cache",
     variables: { offset: 0 },
   });
+=======
+    },
+  ] = useLazyQuery(SEARCH_GENERAL);
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
   const [
     startQueryFnShopName,
@@ -50,12 +55,17 @@ export default function SearchNav({ navigation }) {
       data: dataShopName,
       refetch: refetchShopName,
       called: calledShopName,
+<<<<<<< HEAD
       fetchMore: fetchMoreShopName,
     },
   ] = useLazyQuery(SEARCH_SHOPNAME, {
     fetchPolicy: "no-cache",
     variables: { offset: 0 },
   });
+=======
+    },
+  ] = useLazyQuery(SEARCH_SHOPNAME);
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
   const [
     startQueryFnCategories,
@@ -64,12 +74,17 @@ export default function SearchNav({ navigation }) {
       data: dataCategories,
       refetch: refetchCategories,
       called: calledCategories,
+<<<<<<< HEAD
       fetchMore: fetchMoreCategories,
     },
   ] = useLazyQuery(SEARCH_CATEGORIES, {
     fetchPolicy: "no-cache",
     variables: { offset: 0 },
   });
+=======
+    },
+  ] = useLazyQuery(SEARCH_CATEGORIES);
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
   const [
     startQueryFnUsers,
@@ -78,12 +93,17 @@ export default function SearchNav({ navigation }) {
       data: dataUser,
       refetch: refetchUser,
       called: calledUser,
+<<<<<<< HEAD
       fetchMore: fetchMoreUser,
     },
   ] = useLazyQuery(SEARCH_USER, {
     fetchPolicy: "no-cache",
     variables: { offset: 0 },
   });
+=======
+    },
+  ] = useLazyQuery(SEARCH_USER);
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
   const onValid = ({ keyword }) => {
     startQueryFnGeneral({
@@ -154,7 +174,10 @@ export default function SearchNav({ navigation }) {
             data={dataGeneral}
             called={calledGeneral}
             refetch={refetchGeneral}
+<<<<<<< HEAD
             fetchMore={fetchMoreGeneral}
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
           />
         )}
       </Tab.Screen>
@@ -166,7 +189,10 @@ export default function SearchNav({ navigation }) {
             data={dataShopName}
             called={calledShopName}
             refetch={refetchShopName}
+<<<<<<< HEAD
             fetchMore={fetchMoreShopName}
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
           />
         )}
       </Tab.Screen>
@@ -178,7 +204,10 @@ export default function SearchNav({ navigation }) {
             data={dataCategories}
             called={calledCategories}
             refetch={refetchCategories}
+<<<<<<< HEAD
             fetchMore={fetchMoreCategories}
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
           />
         )}
       </Tab.Screen>
@@ -190,7 +219,10 @@ export default function SearchNav({ navigation }) {
             data={dataUser}
             called={calledUser}
             refetch={refetchUser}
+<<<<<<< HEAD
             fetchMore={fetchMoreUser}
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
           />
         )}
       </Tab.Screen>

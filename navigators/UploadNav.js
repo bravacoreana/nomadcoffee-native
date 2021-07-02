@@ -3,7 +3,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import SelectPhoto from "../screens/camera/SelectPhoto";
 import TakePhoto from "../screens/camera/TakePhoto";
 import { createStackNavigator } from "@react-navigation/stack";
+<<<<<<< HEAD
 import { Ionicons } from "@expo/vector-icons";
+=======
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -25,6 +28,7 @@ export default function UploadNav() {
     >
       <Tab.Screen name="Select">
         {() => (
+<<<<<<< HEAD
           <Stack.Navigator
             screenOptions={{
               headerTintColor: "white",
@@ -40,6 +44,10 @@ export default function UploadNav() {
               options={{ title: "Select a photo" }}
               component={SelectPhoto}
             />
+=======
+          <Stack.Navigator>
+            <Stack.Screen name="Select" component={SelectPhoto} />
+>>>>>>> d00360432558c3c585bb8ef2e314b5a44c8b01b9
           </Stack.Navigator>
         )}
       </Tab.Screen>
