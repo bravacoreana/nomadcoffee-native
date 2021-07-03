@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import Maps from "../components/GeoCoder";
@@ -19,9 +19,10 @@ const Photo = styled.Image`
 
 const CafeContainer = styled.View``;
 const UserContainer = styled.View``;
-const UserColumn = styled.View`
+const CaptionContainer = styled.View``;
+const UserColumn = styled.TouchableOpacity`
   flex-direction: row;
-  margin-top: 20px;
+  margin: 20px 0;
   align-items: center;
 `;
 const IconContainer = styled.View`
@@ -35,8 +36,23 @@ const AvatarContainer = styled.View`
   margin-right: 20px;
 `;
 const ContentContainer = styled.View`
-  /* border: 1px solid yellow; */
   margin-top: 20px;
+`;
+const CategoryColumn = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+`;
+const CategoryContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 90%;
+`;
+
+const ShopCategoryContainer = styled.View`
+  margin-bottom: 5px;
+  margin-right: 5px;
+  /* flex-wrap: wrap; */
 `;
 
 const Column = styled.View`
@@ -61,6 +77,7 @@ const Avatar = styled.Image`
   border-radius: 20px;
   margin-right: 10px;
 `;
+
 export default function ShopDetail({ navigation, route }) {
   useEffect(() => {
     if (route?.params?.name) {
@@ -96,7 +113,14 @@ export default function ShopDetail({ navigation, route }) {
       </PhotoContainer>
       <CafeContainer>
         <UserContainer>
-          <UserColumn>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Profile")}
+            style={{
+              flexDirection: "row",
+              marginTop: 20,
+              alignItems: "center",
+            }}
+          >
             <AvatarContainer>
               {route?.params?.user?.avatar ? (
                 <Avatar source={{ uri: route.params.user.avatar }} />
@@ -105,10 +129,10 @@ export default function ShopDetail({ navigation, route }) {
               )}
             </AvatarContainer>
             <Content>{route?.params?.user?.username}</Content>
-          </UserColumn>
-          <UserColumn>
+          </TouchableOpacity>
+          <CaptionContainer>
             <Content>{route?.params?.caption}</Content>
-          </UserColumn>
+          </CaptionContainer>
         </UserContainer>
         <ContentContainer>
           <Column>
@@ -134,28 +158,22 @@ export default function ShopDetail({ navigation, route }) {
               {route?.params?.likes} people like this cafe.
             </ContentText>
           </Column>
-          <Column>
+          <CategoryColumn>
             <IconContainer>
               <Ionicons name="information-outline" color="white" size={20} />
             </IconContainer>
-            {route?.params?.categories
-              ? route.params.categories.map((category) => (
-                  <ShopCategoryComponent {...category} key={category.id} />
-                ))
-              : null}
-          </Column>
+            <CategoryContainer>
+              {route?.params?.categories
+                ? route.params.categories.map((category, index) => (
+                    <ShopCategoryContainer key={"" + category.id}>
+                      <ShopCategoryComponent {...category} key={category.id} />
+                    </ShopCategoryContainer>
+                  ))
+                : null}
+            </CategoryContainer>
+          </CategoryColumn>
         </ContentContainer>
       </CafeContainer>
     </Container>
-    // <View
-    //   style={{
-    //     backgroundColor: "black",
-    //     flex: 1,
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //   }}
-    // >
-    //   <Text style={{ color: "white" }}>Shop Detail</Text>
-    // </View>
   );
 }

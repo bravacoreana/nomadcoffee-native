@@ -34,6 +34,7 @@ const onErrorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const uploadHttpLink = createUploadLink({
+  // uri: "https://chilly-turkey-99.loca.lt/graphql",
   uri: "http://localhost:4000/graphql",
 });
 

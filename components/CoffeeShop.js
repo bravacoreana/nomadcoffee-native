@@ -154,6 +154,27 @@ export default function CoffeeShop(props) {
               padding: 0,
             }}
           />
+          {/* 
+          {photos[0]?.url ? (
+            <File
+              resizeMode="cover"
+              style={{
+                //   width: width,
+                padding: 0,
+              }}
+              source={{ uri: photos[0].url }}
+            />
+          ) : (
+            <File
+              key={Math.random()}
+              source={{ uri: "https://picsum.photos/200" }}
+              style={{
+                //   width: width,
+                padding: 0,
+              }}
+            />
+          )} */}
+
           <LikeButton onPress={toggleLikeMutation}>
             <Ionicons
               name={isLiked ? "bookmark" : "bookmark-outline"}

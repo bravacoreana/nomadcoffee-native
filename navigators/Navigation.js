@@ -45,7 +45,7 @@ export default function Navigation({ navigation }) {
           headerTintColor: "white",
         }}
       />
-      <Stack.Screen name="FindAddress" component={FindAddress} options={{}} />
+      <Stack.Screen name="FindAddress" component={FindAddress} />
     </Stack.Navigator>
   );
 }

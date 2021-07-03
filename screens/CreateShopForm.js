@@ -41,6 +41,9 @@ const TextForm = styled.TextInput`
   width: 100%;
 `;
 
+const TextFormAddress = styled.TextInput`
+  display: none;
+`;
 const TextCaption = styled.TextInput`
   background-color: rgba(255, 255, 255, 0.15);
   flex: 1;
@@ -76,6 +79,7 @@ export default function CreateShopForm({ navigation, route }) {
       longitude: "" + route?.params?.longitude,
     },
   });
+
   const updateShop = (cache, result) => {
     const {
       data: { createCoffeeShop },
@@ -176,20 +180,22 @@ export default function CreateShopForm({ navigation, route }) {
               onChangeText={(text) => setValue("categories", text)}
               // onSubmitEditing={() => onNext(addressRef)}
             />
-            <TextForm
+
+            <TextFormAddress
               placeholder="Add address"
               value={"" + route?.params?.latitude || watch("latitude")}
               returnKeyType="next"
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("latitude", text)}
             />
-            <TextForm
+            <TextFormAddress
               placeholder="Add address"
               value={"" + route?.params?.longitude || watch("longitude")}
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("longitude", text)}
               returnKeyType="done"
             />
+
             <Button title="Find your location on map" onPress={goToMap} />
           </BottomColumn>
           {/* <MapsAddress /> */}

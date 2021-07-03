@@ -4,9 +4,11 @@ import SearchNav from "./SearchNav";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import ShopDetail from "../screens/ShopDetail";
+import SignUp from "../screens/SignUp";
 import CreateShopForm from "../screens/CreateShopForm";
 import { Ionicons } from "@expo/vector-icons";
 import FindAddress from "../screens/FindAddress";
+import LogIn from "../screens/LogIn";
 
 const Stack = createStackNavigator();
 
@@ -35,6 +37,8 @@ export default function ({ screenName }) {
         <Stack.Screen name="Profile" component={Profile} />
       ) : null}
       <Stack.Screen name="ShopDetail" component={ShopDetail} />
+      {/* <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="LogIn" component={LogIn} /> */}
     </Stack.Navigator>
   );
 }

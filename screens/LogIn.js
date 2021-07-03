@@ -17,7 +17,8 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export default function LogIn() {
+export default function LogIn({ navigation }) {
+  console.log(navigation);
   const { register, handleSubmit, setValue, watch } = useForm();
   const passwordRef = useRef();
 
