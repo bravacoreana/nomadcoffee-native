@@ -40,7 +40,9 @@ const TextForm = styled.TextInput`
   color: white;
   width: 100%;
 `;
-
+const Message = styled.Text`
+  color: white;
+`;
 const TextFormAddress = styled.TextInput`
   display: none;
 `;
@@ -180,20 +182,14 @@ export default function CreateShopForm({ navigation, route }) {
               onChangeText={(text) => setValue("categories", text)}
               // onSubmitEditing={() => onNext(addressRef)}
             />
-
+            <Message>* Category will be divided by space.</Message>
             <TextFormAddress
-              placeholder="Add address"
               value={"" + route?.params?.latitude || watch("latitude")}
-              returnKeyType="next"
-              placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("latitude", text)}
             />
             <TextFormAddress
-              placeholder="Add address"
               value={"" + route?.params?.longitude || watch("longitude")}
-              placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("longitude", text)}
-              returnKeyType="done"
             />
 
             <Button title="Find your location on map" onPress={goToMap} />

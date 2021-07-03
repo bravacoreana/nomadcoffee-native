@@ -1,26 +1,17 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-// import { TouchableOpacity } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import styled from "styled-components/native";
 import Geocoder from "react-native-geocoding";
 import { useState } from "react/cjs/react.development";
-// import { Location, Permissions } from "expo";
-// import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
-// import * as Permissions from "expo-permissions";
 
 const Container = styled.View`
   flex: 1;
   background-color: black;
 `;
 
-const InputContainer = styled.View`
-  /* flex: 1; */
-  /* margin-top: 10px; */
-  /* width: 100%; */
-  /* flex-direction: row; */
-`;
+const InputContainer = styled.View``;
 
 const TextInput = styled.TextInput`
   width: 100%;
@@ -33,10 +24,6 @@ const TextInput = styled.TextInput`
   background-color: rgba(255, 255, 255, 0.3);
 `;
 
-const Text = styled.Text`
-  color: white;
-`;
-
 const Button = styled.Button``;
 
 export default function FindAddress({ navigation }) {
@@ -45,7 +32,7 @@ export default function FindAddress({ navigation }) {
     longitude: 127.024612,
   });
   const [errorMsg, setErrorMsg] = useState(null);
-  const { register, setValue, handleSubmit, getValues, watch } = useForm();
+  const { register, setValue, handleSubmit } = useForm();
 
   const getPermission = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -63,19 +50,6 @@ export default function FindAddress({ navigation }) {
 
   useEffect(() => {
     getPermission();
-    // (async () => {
-    //   let { status } = await Location.requestForegroundPermissionsAsync();
-    //   if (status !== "granted") {
-    //     setErrorMsg("Permission to access location was denied");
-    //     return;
-    //   }
-
-    //   let location = await Location.getCurrentPositionAsync({});
-    //   setLocation({
-    //     latitude: location.coords.latitude,
-    //     longitude: location.coords.longitude,
-    //   });
-    // })();
   }, []);
 
   useEffect(() => {
@@ -100,6 +74,7 @@ export default function FindAddress({ navigation }) {
   const onCompleted = (data) => {
     navigation.navigate("CreateShopForm", location);
   };
+
   return (
     <Container>
       <InputContainer>

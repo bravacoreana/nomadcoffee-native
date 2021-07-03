@@ -19,12 +19,16 @@ const Photo = styled.Image`
 
 const CafeContainer = styled.View``;
 const UserContainer = styled.View``;
-const CaptionContainer = styled.View``;
+const CaptionContainer = styled.View`
+  margin-top: 20px;
+`;
+
 const UserColumn = styled.TouchableOpacity`
   flex-direction: row;
   margin: 20px 0;
   align-items: center;
 `;
+
 const IconContainer = styled.View`
   margin-right: 20px;
 `;

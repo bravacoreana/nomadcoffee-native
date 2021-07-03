@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components/native";
-import { useWindowDimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Maps from "./GeoCoder";
 import { useNavigation } from "@react-navigation/native";
@@ -28,34 +27,37 @@ const Container = styled.TouchableOpacity`
 
 const PhotoContainer = styled.View``;
 
-const Column = styled.View`
-  width: 50%;
+const ColumnLeft = styled.View`
+  width: 55%;
+`;
+
+const ColumnRight = styled.View`
+  flex: 1;
   height: 100%;
 `;
+
 const File = styled.Image`
-  aspect-ratio: 1.5;
   width: 100%;
   height: 100%;
   border-radius: 10px;
 `;
 const LikeButton = styled.TouchableOpacity`
   position: absolute;
-  right: 5px;
-  bottom: 5px;
+  bottom: 7px;
+  right: 10px;
 `;
 
 const ShopContainer = styled.View`
-  height: 160px;
-  margin-left: 15px;
+  height: 157px;
+  margin-left: 10px;
   position: relative;
 `;
+
 const ShopName = styled.Text`
   color: white;
   font-size: 20px;
   margin-top: 10px;
 `;
-
-const Username = styled.Text``;
 
 const ShopLocation = styled.Text`
   text-align: right;
@@ -67,17 +69,6 @@ const ShopCategories = styled.View`
   right: 0;
   bottom: 20px;
   flex-direction: row;
-`;
-
-const ShopCategory = styled.TouchableOpacity`
-  padding: 7px;
-  background-color: rgba(255, 192, 203, 0.8);
-  border-radius: 15px;
-`;
-
-const Category = styled.Text`
-  color: white;
-  font-weight: 600;
 `;
 
 export default function CoffeeShop(props) {
@@ -94,7 +85,7 @@ export default function CoffeeShop(props) {
     isLiked,
     caption,
   } = props;
-  const { width, height, scale } = useWindowDimensions();
+
   const navigation = useNavigation();
 
   const updateToggleLike = (cache, result) => {
@@ -144,9 +135,9 @@ export default function CoffeeShop(props) {
 
   return (
     <Container key={id} onPress={goToShopDetail}>
-      <Column>
+      <ColumnLeft>
         <PhotoContainer>
-          <File
+          {/* <File
             key={Math.random()}
             source={{ uri: "https://picsum.photos/200" }}
             style={{
@@ -154,7 +145,7 @@ export default function CoffeeShop(props) {
               padding: 0,
             }}
           />
-          {/* 
+           */}
           {photos[0]?.url ? (
             <File
               resizeMode="cover"
@@ -173,7 +164,7 @@ export default function CoffeeShop(props) {
                 padding: 0,
               }}
             />
-          )} */}
+          )}
 
           <LikeButton onPress={toggleLikeMutation}>
             <Ionicons
@@ -183,8 +174,8 @@ export default function CoffeeShop(props) {
             />
           </LikeButton>
         </PhotoContainer>
-      </Column>
-      <Column>
+      </ColumnLeft>
+      <ColumnRight>
         <ShopContainer>
           <ShopLocation>
             <Ionicons name="location-outline" color="white" size={20} />
@@ -202,7 +193,7 @@ export default function CoffeeShop(props) {
             ) : null}
           </ShopCategories>
         </ShopContainer>
-      </Column>
+      </ColumnRight>
     </Container>
   );
 }
