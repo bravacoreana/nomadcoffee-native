@@ -1,46 +1,26 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import styled from "styled-components/native";
-import { logUserOut } from "../apollo";
-import useMe from "../hooks/useMe";
-// import useUser from "../hooks/useUser";
-
-const SEE_PROFILE_QUERY = gql`
-  query seeProfile($username: String!) {
-    seeProfile(username: $username) {
-      id
-      username
-      name
-      location
-      avatar
-      bio
-      # githubUsername
-      isMe
-      # following
-      # followers
-    }
-  }
-`;
-
-const ProfileContainer = styled.View`
-  background-color: black;
+import { SEE_PROFILE_QUERY } from "../queries";
+import useUser from "../hooks/useUser";
+const Container = styled.View`
+  background-color: #000;
   flex: 1;
   align-items: center;
-  /* justify-content: center; */
 `;
 
-const UserProfile = styled.View`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+const UserContainer = styled.View`
+  height: 30%;
+  padding: 10px 10px;
   width: 100%;
-  background-color: #000;
-  padding: 100px 0px;
+  padding-top: 30px;
 `;
-
-const Detail = styled.View`
+const TopColumn = styled.View`
+  flex-direction: row;
   align-items: center;
+  width: 100%;
+  justify-content: space-around;
 `;
 const AvatarContainer = styled.View`
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -54,124 +34,80 @@ const Avatar = styled.Image`
   border-radius: 50px;
   margin-bottom: 10px;
 `;
-
-const Content = styled.Text`
+const Bio = styled.Text`
+  margin-top: 20px;
   color: white;
 `;
-
-const ContentTitle = styled.Text`
+const BioNull = styled.Text`
+  color: rgba(255, 255, 255, 0.3);
+`;
+const UserDetailColumn = styled.View``;
+const DetailContainer = styled.View``;
+const DetailColumn = styled.View`
+  flex-direction: row;
+  padding: 0px 10px;
+`;
+const DetailTitle = styled.Text`
   color: white;
   text-align: left;
-  /* width: 50%; */
+  width: 80px;
 `;
-
-const Buttons = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  margin-top: 20px;
-`;
-
-const Button = styled.Text`
+const Detail = styled.Text`
   color: white;
-  padding: 7px 10px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-  width: 100%;
-  margin-left: 5px;
-  width: 100px;
-  text-align: center;
+  text-align: left;
+  margin-left: 7px;
 `;
 
-const DetailContainer = styled.View`
+const BioColumn = styled.View`
   width: 100%;
-  justify-content: space-around;
-  background-color: rgba(255, 255, 255, 0.2);
+`;
+
+const BottomColumn = styled.View`
+  background-color: yellow;
+  width: 100%;
   flex: 1;
 `;
 
-const InfoBox = styled.View`
-  width: 100%;
-  margin: 0px 10px;
-  /* background-color: rgba(255, 255, 255, 0.2); */
-`;
-
-const Info = styled.Text`
-  color: white;
-  text-align: left;
-  font-size: 20px;
-  margin-left: 7px;
-`;
-
-const InfoPlaceHolder = styled.Text`
-  color: rgba(255, 255, 255, 0.3);
-  text-align: left;
-  font-size: 20px;
-  margin-left: 7px;
-`;
 export default function Profile({ navigation, route }) {
-  const { data } = useMe();
-
-  const { data: QueryData } = useQuery(SEE_PROFILE_QUERY, {
-    variables: {
-      username: data?.me?.username,
-    },
-  });
+  const { data } = useUser(route.params.username);
 
   useEffect(() => {
-    navigation.setOptions({
-      title: data?.me?.username,
-    });
+    if (route?.params?.username) {
+      navigation.setOptions({
+        title: route.params.username,
+      });
+    }
   }, []);
 
   return (
-    <ProfileContainer>
-      {data?.me ? (
-        <UserProfile>
-          <Detail>
-            <AvatarContainer>
-              <Avatar source={{ uri: data.me.avatar }} />
-            </AvatarContainer>
-            <Content>
-              {QueryData?.seeProfile?.bio ? QueryData?.seeProfile?.bio : null}
-            </Content>
-          </Detail>
-          <Buttons>
-            <TouchableOpacity>
-              <Button>Edit Profile</Button>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={logUserOut}>
-              <Button>Log out</Button>
-            </TouchableOpacity>
-          </Buttons>
-        </UserProfile>
-      ) : null}
-      <DetailContainer>
-        <InfoBox>
-          <ContentTitle>USERNAME</ContentTitle>
-          <Info>{QueryData?.seeProfile?.username}</Info>
-        </InfoBox>
-        <InfoBox>
-          <ContentTitle>NAME</ContentTitle>
-          <Info>{QueryData?.seeProfile?.name}</Info>
-        </InfoBox>
-        <InfoBox>
-          <ContentTitle>LOCATION</ContentTitle>
-          {QueryData?.seeProfile?.location ? (
-            <Info>{QueryData?.seeProfile?.location}</Info>
+    <Container>
+      <UserContainer>
+        <TopColumn>
+          <AvatarContainer>
+            <Avatar source={{ uri: data?.seeProfile?.avatar }} />
+          </AvatarContainer>
+          <UserDetailColumn>
+            <DetailContainer>
+              <DetailColumn>
+                <DetailTitle>NAME</DetailTitle>
+                <Detail>{data?.seeProfile?.name}</Detail>
+              </DetailColumn>
+              <DetailColumn>
+                <DetailTitle>USERNAME</DetailTitle>
+                <Detail>{data?.seeProfile?.username}</Detail>
+              </DetailColumn>
+            </DetailContainer>
+          </UserDetailColumn>
+        </TopColumn>
+        <BioColumn>
+          {data?.seeProfile?.bio ? (
+            <Bio>{data?.seeProfile?.bio}</Bio>
           ) : (
-            <InfoPlaceHolder>Not available</InfoPlaceHolder>
+            <BioNull>no bio</BioNull>
           )}
-        </InfoBox>
-        <InfoBox>
-          <ContentTitle>BIO</ContentTitle>
-          {QueryData?.seeProfile?.bio ? (
-            <Info>{QueryData?.seeProfile?.bio}</Info>
-          ) : (
-            <InfoPlaceHolder>Not available</InfoPlaceHolder>
-          )}
-        </InfoBox>
-      </DetailContainer>
-    </ProfileContainer>
+        </BioColumn>
+      </UserContainer>
+      <BottomColumn></BottomColumn>
+    </Container>
   );
 }

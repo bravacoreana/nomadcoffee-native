@@ -6,10 +6,6 @@ import ScreenLayout from "../components/ScreenLayout";
 import CoffeeShop from "../components/CoffeeShop";
 import { SEE_COFFEESHOPS_QUERY } from "../queries";
 
-const CoffeeShops = styled.View`
-  margin-top: 20px;
-`;
-
 const Background = styled.Image`
   height: 100%;
   width: 100%;
@@ -37,11 +33,11 @@ export default function Home() {
     await refetch();
     setRefreshing(false);
   };
+
   const [refreshing, setRefreshing] = useState(false);
   return (
     <ScreenLayout loading={loading}>
       <Background source={require("../assets/background.jpeg")} />
-      {/* <CoffeeShops> */}
       <FlatList
         style={{ width: "100%" }}
         onEndReachedThreshold={0.05}
@@ -64,7 +60,6 @@ export default function Home() {
         renderItem={renderShop}
         keyExtractor={(shop) => "" + shop.id}
       />
-      {/* </CoffeeShops> */}
     </ScreenLayout>
   );
 }

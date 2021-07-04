@@ -1,13 +1,36 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { ReactNativeFile } from "apollo-upload-client";
 // import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 import { CREATE_SHOP_MUTATION } from "../queries/shopQueries";
 // import MapsAddress from "../components/ReGeoCoder";
+
+const EDIT_SHOP_MUTATION = gql`
+  mutation editCoffeeShop(
+    $id: Int!
+    $name: String
+    $latitude: String
+    $longitude: String
+    $photos: [Upload]
+    $categories: [String]
+  ) {
+    editCoffeeShop(
+      id: $id
+      name: $name
+      latitude: $latitude
+      longitude: $longitude
+      photos: $photos
+      categories: $categories
+    ) {
+      ok
+      error
+    }
+  }
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -18,6 +41,7 @@ const Container = styled.View`
 const PhotoContainer = styled.View`
   border: 1px solid red;
   height: 100px;
+  /* margin-right: 20px; */
 `;
 
 const Photo = styled.Image`
@@ -73,32 +97,92 @@ const LoadingContainer = styled.View`
   align-items: center;
 `;
 
-export default function CreateShopForm({ navigation, route }) {
+export default function EditShop({ navigation, route }) {
+  const {
+    params: {
+      route: {
+        params: {
+          caption,
+          categories,
+          id,
+          latitude,
+          longitude,
+          name,
+          photos,
+          user,
+        },
+      },
+    },
+  } = route;
+
   const { register, handleSubmit, setValue, watch, getValues } = useForm({
     defaultValues: {
-      latitude: "" + route?.params?.latitude,
+      caption: caption ?? "hi",
+      name: name ?? "null",
+      categories: categories.map((category) => category.name).join(",") ?? null,
+      latitude: "" + route?.params?.latitude ?? null,
       longitude: "" + route?.params?.longitude,
     },
   });
 
-  const updateShop = (cache, result) => {
+  const updateShop = async (cache, result) => {
     const {
-      data: { createCoffeeShop },
+      data: { editCoffeeShop },
     } = result;
+    const {
+      name: newName,
+      caption: newCaption,
+      categories: newCategories,
+      latitude: newLatitude,
+      longitude: newLongitude,
+    } = getValues();
 
-    if (createCoffeeShop.ok) {
-      cache.modify({
-        id: "ROOT_QUERY",
-        fields: {
-          seeCoffeeShops(prev) {
-            [createCoffeeShop, ...prev];
-          },
-        },
+    if (editCoffeeShop.ok) {
+      const shopId = `CoffeeShop:${id}`;
+      const fragment = gql`
+        fragment EDIT_SHOP on CoffeeShop {
+          name
+          caption
+          categories {
+            name
+          }
+          latitude
+          longitude
+        }
+      `;
+
+      const result = await cache.readFragment({
+        id: shopId,
+        fragment,
       });
-      navigation.navigate("Tabs");
+
+      if (
+        "name" in result &&
+        "caption" in result &&
+        "latitude" in result &&
+        "longitude" in result &&
+        "categories" in result
+      ) {
+        cache.writeFragment({
+          id: shopId,
+          fragment,
+          data: {
+            name: newName,
+            caption: newCaption,
+            categories: { name: newCategories },
+            latitude: newLatitude,
+            longitude: newLongitude,
+          },
+        });
+      }
+      navigation.navigate("Home");
     }
   };
-  const [createShopMutation, { loading }] = useMutation(CREATE_SHOP_MUTATION, {
+
+  const [editShopMutation, { loading }] = useMutation(EDIT_SHOP_MUTATION, {
+    variables: {
+      id,
+    },
     update: updateShop,
   });
 
@@ -115,8 +199,9 @@ export default function CreateShopForm({ navigation, route }) {
       type: "image/jpeg",
     });
 
-    createShopMutation({
+    editShopMutation({
       variables: {
+        id: route.params.route.params.id,
         name,
         photos: file,
         caption,
@@ -137,6 +222,7 @@ export default function CreateShopForm({ navigation, route }) {
 
   useEffect(() => {
     navigation.setOptions({
+      title: "Edit information",
       headerRight: loading ? null : HeaderRight,
       ...(loading && { headerLeft: () => null }),
     });
@@ -146,30 +232,28 @@ export default function CreateShopForm({ navigation, route }) {
     navigation.navigate("FindAddress");
   };
 
-  const nameRef = useRef();
-  const categoryRef = useRef();
-
   return (
     <DismissKeyboard>
       {!loading ? (
         <Container>
           <TopColumn>
             <PhotoContainer>
-              <Photo resizeMode="contain" source={{ uri: route.params.file }} />
+              <Photo
+                resizeMode="contain"
+                source={{ uri: route.params.route.params.photos[0].url }}
+              />
             </PhotoContainer>
             <TextCaption
-              placeholder="Write a caption"
+              // placeholder="Write a caption"
               value={watch("caption")}
               returnKeyType="next"
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("caption", text)}
-              onSubmitEditing={() => oncontextmenu(nameRef)}
               multiline={true}
             />
           </TopColumn>
           <BottomColumn>
             <TextForm
-              ref={nameRef}
               placeholder="Add cafe name"
               value={watch("name")}
               returnKeyType="next"
@@ -178,15 +262,14 @@ export default function CreateShopForm({ navigation, route }) {
               // onSubmitEditing={() => onNext(captionRef)}
             />
             <TextForm
-              ref={categoryRef}
               placeholder="Add category"
               value={watch("categories")}
-              returnKeyType="done"
+              returnKeyType="next"
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}
               onChangeText={(text) => setValue("categories", text)}
               // onSubmitEditing={() => onNext(addressRef)}
             />
-            <Message>* Category will be divided by comma(,).</Message>
+            <Message>* Category will be divided by space.</Message>
             <TextFormAddress
               value={"" + route?.params?.latitude || watch("latitude")}
               onChangeText={(text) => setValue("latitude", text)}

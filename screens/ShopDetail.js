@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import Maps from "../components/GeoCoder";
 import ShopCategoryComponent from "../components/Category";
+import useMe from "../hooks/useMe";
 
 const Container = styled.View`
   background-color: black;
@@ -64,7 +65,23 @@ const Column = styled.View`
   align-items: center;
   margin: 3px 0px;
 `;
+const ButtonContainer = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
 
+const EditButton = styled.TouchableOpacity`
+  right: 5px;
+  bottom: 5px;
+`;
+
+const ButtonText = styled.Text`
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 7px 10px;
+  border-radius: 3px;
+  font-weight: 600;
+`;
 const Content = styled.Text`
   color: white;
   font-size: 16px;
@@ -90,6 +107,7 @@ export default function ShopDetail({ navigation, route }) {
       });
     }
   }, []);
+  const { data } = useMe();
 
   return (
     <Container>
@@ -114,11 +132,25 @@ export default function ShopDetail({ navigation, route }) {
             padding: 0,
           }}
         />
+        {data.me ? (
+          <ButtonContainer>
+            <EditButton
+              onPress={() => navigation.navigate("EditShop", { route })}
+            >
+              <ButtonText>Edit Details</ButtonText>
+            </EditButton>
+          </ButtonContainer>
+        ) : null}
       </PhotoContainer>
       <CafeContainer>
         <UserContainer>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Profile")}
+            onPress={() =>
+              navigation.navigate("LookProfile", {
+                username: route.params.user.username,
+                id: route.params.user.id,
+              })
+            }
             style={{
               flexDirection: "row",
               marginTop: 20,
@@ -170,7 +202,11 @@ export default function ShopDetail({ navigation, route }) {
               {route?.params?.categories
                 ? route.params.categories.map((category, index) => (
                     <ShopCategoryContainer key={"" + category.id}>
-                      <ShopCategoryComponent {...category} key={category.id} />
+                      <ShopCategoryComponent
+                        {...category}
+                        key={category.id}
+                        onlyFirst={false}
+                      />
                     </ShopCategoryContainer>
                   ))
                 : null}

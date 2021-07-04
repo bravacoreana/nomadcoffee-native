@@ -6,6 +6,7 @@ import { logUserIn } from "../apollo";
 import { TextInput } from "../components/auth/AuthCommon";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthButton from "../components/auth/AuthButton";
+import styled from "styled-components/native";
 
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
@@ -17,8 +18,15 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export default function LogIn({ navigation }) {
-  const { register, handleSubmit, setValue, watch } = useForm();
+const Button = styled.Button``;
+
+export default function LogIn({ navigation, route }) {
+  const { register, handleSubmit, setValue, watch } = useForm({
+    defaultValues: {
+      username: route?.params?.username,
+      password: route?.params?.password,
+    },
+  });
   const passwordRef = useRef();
 
   const onCompleted = async (data) => {
@@ -82,6 +90,7 @@ export default function LogIn({ navigation }) {
         disabled={!watch("username") || !watch("password")}
         onPress={handleSubmit(onValid)}
       />
+      <Button title="sign up" onPress={() => navigation.navigate("SignUp")} />
     </AuthLayout>
   );
 }

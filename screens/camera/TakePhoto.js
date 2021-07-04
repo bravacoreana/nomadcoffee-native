@@ -84,10 +84,6 @@ export default function TakePhoto({ navigation }) {
       });
       const { uri } = photo;
       setTakenPhoto(uri);
-      // save it on user's phone
-      // saveToLibraryAsync(uri) : 어떤 객체도 반환하지 않음
-      // createAssetAsync(uri) : asset 객체 반환
-      // const asset = await MediaLibrary.createAssetAsync(uri);
     }
   };
 

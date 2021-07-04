@@ -30,7 +30,7 @@ export default function SearchShops({
   };
 
   const renderShop = ({ item: shop }) => {
-    return <CoffeeShop {...shop} key={shop.id} />;
+    return <CoffeeShop {...shop} key={"" + shop.id} />;
   };
 
   return (
