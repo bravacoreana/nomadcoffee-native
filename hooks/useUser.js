@@ -8,12 +8,15 @@ const USER_QUERY = gql`
       id
       username
       name
+      email
+      bio
       location
       avatar
       githubUsername
       isMe
-      following
-      followers
+      # isFollowing
+      # following
+      # followers
     }
   }
 `;

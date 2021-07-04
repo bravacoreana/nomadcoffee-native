@@ -24,6 +24,7 @@ export const FEED_FRAGMENT = gql`
     latitude
     longitude
     user {
+      id
       username
       avatar
     }
@@ -53,10 +54,16 @@ export const FEED_FRAGMENT = gql`
 //   }
 // `;
 
-// export const USER_FRAGMENT = gql`
-// fragment UserFragment on User {
-//   id
-//   username
-//   avatar
-// }
-// `;
+export const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
+    id
+    username
+    avatar
+    email
+    name
+    password
+    bio
+    isFollowing
+    isMe
+  }
+`;

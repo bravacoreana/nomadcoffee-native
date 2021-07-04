@@ -61,3 +61,21 @@ export const SEARCH_USER = gql`
     }
   }
 `;
+
+export const SEE_PROFILE_QUERY = gql`
+  query seeProfile($username: String!) {
+    seeProfile(username: $username) {
+      id
+      username
+      name
+      location
+      avatar
+      bio
+      email
+      # githubUsername
+      isMe
+      # following
+      # followers
+    }
+  }
+`;
