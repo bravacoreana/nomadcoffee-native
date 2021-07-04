@@ -57,18 +57,18 @@ export default function FindAddress({ navigation }) {
   }, [register]);
 
   const onValid = ({ address }) => {
-    // Geocoder.init("AIzaSyA0-2t63DuQXrAY6_aOR72w2RbWWMaU5Ak", {
-    //   location_type: "ROOFTOP",
-    // });
-    // Geocoder.from(address)
-    //   .then((json) => json.results[0].geometry.location)
-    //   .then((data) => {
-    //     setLocation({
-    //       latitude: data.lat,
-    //       longitude: data.lng,
-    //     });
-    //   })
-    //   .catch((error) => console.warn(error));
+    Geocoder.init("AIzaSyA0-2t63DuQXrAY6_aOR72w2RbWWMaU5Ak", {
+      location_type: "ROOFTOP",
+    });
+    Geocoder.from(address)
+      .then((json) => json.results[0].geometry.location)
+      .then((data) => {
+        setLocation({
+          latitude: data.lat,
+          longitude: data.lng,
+        });
+      })
+      .catch((error) => console.warn(error));
   };
 
   const onCompleted = (data) => {
@@ -104,7 +104,7 @@ export default function FindAddress({ navigation }) {
         }}
       >
         <Marker
-          title="San Fransco"
+          title="Your Cafe"
           coordinate={{
             latitude: location.latitude,
             longitude: location.longitude,

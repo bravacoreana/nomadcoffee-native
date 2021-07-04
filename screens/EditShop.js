@@ -244,7 +244,6 @@ export default function EditShop({ navigation, route }) {
               />
             </PhotoContainer>
             <TextCaption
-              // placeholder="Write a caption"
               value={watch("caption")}
               returnKeyType="next"
               placeholderTextColor={"rgba(255, 255, 255, 0.8)"}

@@ -139,7 +139,6 @@ export default function EditProfile({ navigation, route }) {
   };
 
   const [signUpMutation, { loading }] = useMutation(EDIT_PROFILE_MUTATION, {
-    // onCompleted,
     variables: { id },
     update: updateProfile,
   });
