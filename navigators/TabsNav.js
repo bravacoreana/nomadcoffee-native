@@ -19,7 +19,6 @@ export default function TabsNav() {
         style: {
           borderTopColor: "rgba(255,255,255,0.2)",
           backgroundColor: "black",
-          // backgroundColor: (props) => props.backgroundColor,
         },
       }}
     >
@@ -87,7 +86,14 @@ export default function TabsNav() {
             ),
         }}
       >
-        {() => (data?.me ? <SharedStackNav screenName="Profile" /> : <LogIn />)}
+        {/* {() => <SharedStackNav screenName="Profile" />} */}
+        {() =>
+          data?.me ? (
+            <SharedStackNav screenName="Profile" />
+          ) : (
+            <SharedStackNav screenName="LogIn" />
+          )
+        }
       </Tabs.Screen>
     </Tabs.Navigator>
   );

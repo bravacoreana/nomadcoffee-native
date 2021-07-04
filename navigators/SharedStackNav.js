@@ -2,13 +2,13 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchNav from "./SearchNav";
 import Home from "../screens/Home";
-import Profile from "../screens/Profile";
 import ShopDetail from "../screens/ShopDetail";
 import SignUp from "../screens/SignUp";
-import CreateShopForm from "../screens/CreateShopForm";
-import { Ionicons } from "@expo/vector-icons";
-import FindAddress from "../screens/FindAddress";
 import LogIn from "../screens/LogIn";
+import EditProfile from "../screens/EditProfile";
+import Profile from "../screens/Profile";
+import MyProfile from "../screens/MyProfile";
+import EditShop from "../screens/EditShop";
 
 const Stack = createStackNavigator();
 
@@ -34,11 +34,18 @@ export default function ({ screenName }) {
       ) : null}
 
       {screenName === "Profile" ? (
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Profile" component={MyProfile} />
       ) : null}
+
+      {screenName === "LogIn" ? (
+        <Stack.Screen name="LogIn" component={LogIn} />
+      ) : null}
+
+      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="ShopDetail" component={ShopDetail} />
-      {/* <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="LogIn" component={LogIn} /> */}
+      <Stack.Screen name="LookProfile" component={Profile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="EditShop" component={EditShop} />
     </Stack.Navigator>
   );
 }
