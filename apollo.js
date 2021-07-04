@@ -9,7 +9,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createUploadLink } from "apollo-upload-client";
 import { onError } from "@apollo/client/link/error";
 import { offsetLimitPagination } from "@apollo/client/utilities";
-// import { offsetLimitPagination } from "@apollo/client/utilities";
 
 const TOKEN = "token";
 
@@ -34,7 +33,7 @@ const onErrorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const uploadHttpLink = createUploadLink({
-  // uri: "https://chilly-turkey-99.loca.lt/graphql",
+  // uri: "http://3d175337939b.ngrok.io/graphql",
   uri: "http://localhost:4000/graphql",
 });
 
