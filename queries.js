@@ -9,18 +9,6 @@ export const SEE_COFFEESHOPS_QUERY = gql`
   }
   ${FEED_FRAGMENT}
 `;
-// export const SEE_COFFEESHOPS_QUERY = gql`
-//   query seeCoffeeShops($page: Int) {
-//     seeCoffeeShops(page: $page) {
-//       shops {
-//         ...FeedFragment
-//       }
-//       shopsCount
-//       lastPage
-//     }
-//   }
-//   ${FEED_FRAGMENT}
-// `;
 
 export const SEARCH_GENERAL = gql`
   query searchCoffeeShop($keyword: String!) {
@@ -72,10 +60,13 @@ export const SEE_PROFILE_QUERY = gql`
       avatar
       bio
       email
-      # githubUsername
       isMe
-      # following
-      # followers
+      # githubUsername
+      # isFollowing
+      shops {
+        ...ShopFragment
+      }
     }
   }
+  ${SHOP_FRAGMENT}
 `;

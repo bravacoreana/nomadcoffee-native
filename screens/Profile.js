@@ -1,9 +1,10 @@
 import { useQuery } from "@apollo/client";
-import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, RefreshControl } from "react-native";
 import styled from "styled-components/native";
-import { SEE_PROFILE_QUERY } from "../queries";
+import { SEE_COFFEESHOPS_QUERY, SEE_PROFILE_QUERY } from "../queries";
 import useUser from "../hooks/useUser";
+import CoffeeShop from "../components/CoffeeShop";
 const Container = styled.View`
   background-color: #000;
   flex: 1;
@@ -63,13 +64,39 @@ const BioColumn = styled.View`
 `;
 
 const BottomColumn = styled.View`
-  background-color: yellow;
   width: 100%;
   flex: 1;
 `;
 
 export default function Profile({ navigation, route }) {
   const { data } = useUser(route.params.username);
+
+  // FlatList //
+
+  // const {
+  //   data: userShopData,
+  //   loading,
+  //   refetch,
+  //   fetchMore,
+  // } = useQuery(SEE_COFFEESHOPS_QUERY, {
+  //   variables: {
+  //     offset: 0,
+  //   },
+  // });
+
+  // const renderUserShop = ({ item: shop }) => {
+  //   return <CoffeeShop {...shop} key={"" + shop.id} />;
+  // };
+
+  // const onRefresh = async () => {
+  //   setRefreshing(true);
+  //   await refetch();
+  //   setRefreshing(false);
+  // };
+
+  // const [refreshing, setRefreshing] = useState(false);
+
+  // FlatList End //
 
   useEffect(() => {
     if (route?.params?.username) {
@@ -107,7 +134,33 @@ export default function Profile({ navigation, route }) {
           )}
         </BioColumn>
       </UserContainer>
-      <BottomColumn></BottomColumn>
+      <BottomColumn>
+        {/* <FlatList
+          style={{ width: "100%" }}
+          onEndReachedThreshold={0.05}
+          onEndReached={() =>
+            fetchMore({
+              variables: {
+                offset: data?.seeProfile?.shops?.length,
+              },
+            })
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="white"
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          data={data?.seeProfile?.shops}
+          renderItem={renderUserShop}
+          keyExtractor={(shop) => "" + shop.id}
+        /> */}
+        {data?.seeProfile?.shops.map((shop, index) => (
+          <CoffeeShop {...shop} key={"" + shop.id + index} />
+        ))}
+      </BottomColumn>
     </Container>
   );
 }
