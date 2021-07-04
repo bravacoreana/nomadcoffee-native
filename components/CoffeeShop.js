@@ -144,8 +144,8 @@ export default function CoffeeShop(props) {
               //   width: width,
               padding: 0,
             }}
-          />
-           */}
+          /> */}
+
           {photos[0]?.url ? (
             <File
               resizeMode="cover"
@@ -189,6 +189,7 @@ export default function CoffeeShop(props) {
               <ShopCategoryComponent
                 {...categories[0]}
                 key={categories[0].id}
+                onlyFirst={true}
               />
             ) : null}
           </ShopCategories>
